@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Header = ({ activePage }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { user, logout, isAdmin, isUser } = useAuth();
   
   const getActiveClass = (page) => {
     if (activePage === page) return 'active';
@@ -42,6 +44,14 @@ const Header = ({ activePage }) => {
               </ul>
             </li>
             <li><Link to="/contact">Contact</Link></li>
+            {user ? (
+              <>
+                <li><Link to={isAdmin ? '/admin-dashboard' : '/user-dashboard'}>Dashboard</Link></li>
+                <li><a href="#" onClick={logout}>Logout</a></li>
+              </>
+            ) : (
+              <li><Link to="/login">Login</Link></li>
+            )}
           </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -92,6 +102,44 @@ const Header = ({ activePage }) => {
                 <div className="to-search search-switch" onClick={() => setIsSearchOpen(true)}>
                   <i className="fa fa-search"></i>
                 </div>
+                {user ? (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                    <Link 
+                      to={isAdmin ? '/admin-dashboard' : '/user-dashboard'} 
+                      style={{ color: '#ffffff', fontSize: '14px', textDecoration: 'none' }}
+                    >
+                      Dashboard
+                    </Link>
+                    <button 
+                      onClick={logout}
+                      style={{ 
+                        background: 'transparent', 
+                        border: '1px solid #f36100', 
+                        color: '#f36100', 
+                        padding: '5px 10px', 
+                        fontSize: '12px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
+                  <Link 
+                    to="/login" 
+                    style={{ 
+                      background: '#f36100', 
+                      color: '#ffffff', 
+                      padding: '8px 15px', 
+                      fontSize: '12px', 
+                      textDecoration: 'none',
+                      textTransform: 'uppercase',
+                      fontWeight: '700'
+                    }}
+                  >
+                    Login
+                  </Link>
+                )}
                 <div className="to-social">
                   <a href="#"><i className="fa fa-facebook"></i></a>
                   <a href="#"><i className="fa fa-twitter"></i></a>
