@@ -97,7 +97,7 @@ const AdminDashboard = () => {
             {/* Statistics Cards */}
             <div className="row" style={{ marginBottom: '30px' }}>
               <div className="col-lg-2 col-md-4 col-sm-6">
-                <div style={{ background: '#0a0a0a', padding: '20px', border: '1px solid #363636', textAlign: 'center' }}>
+                <div style={{ background: '#902828ff', padding: '20px', border: '1px solid #363636', textAlign: 'center' }}>
                   <h3 style={{ color: '#f36100', margin: '0' }}>{stats.totalUsers}</h3>
                   <p style={{ color: '#c4c4c4', margin: '5px 0 0 0' }}>Total Users</p>
                 </div>
