@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { authAPI } from '../services/api';
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -12,31 +13,23 @@ const LoginForm = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  // Demo users for testing
-  const demoUsers = {
-    'admin@gym.com': { id: 1, name: 'Admin User', role: 'admin', password: 'admin123' },
-    'user@gym.com': { id: 2, name: 'John Doe', role: 'user', password: 'user123' }
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    const user = demoUsers[formData.email];
-    if (user && user.password === formData.password && user.role === formData.role) {
-      login({
-        id: user.id,
-        name: user.name,
-        email: formData.email,
-        role: user.role
-      });
+    try {
+      const response = await authAPI.login(formData);
+      const { token, user } = response.data;
+      
+      localStorage.setItem('token', token);
+      login(user);
       
       if (user.role === 'admin') {
         navigate('/admin-dashboard');
       } else {
         navigate('/user-dashboard');
       }
-    } else {
+    } catch (error) {
       setError('Invalid credentials or role selection');
     }
   };

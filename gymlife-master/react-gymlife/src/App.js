@@ -13,6 +13,9 @@ import ClassDetailsPage from './pages/ClassDetailsPage';
 import ClassTimetablePage from './pages/ClassTimetablePage';
 import BMICalculatorPage from './pages/BMICalculatorPage';
 import LoginPage from './pages/LoginPage';
+import RegistrationPage from './pages/RegistrationPage';
+import AppointmentPage from './pages/AppointmentPage';
+import PricingPage from './pages/PricingPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import UserDashboardPage from './pages/UserDashboardPage';
 
@@ -34,6 +37,9 @@ function App() {
             <Route path="/class-timetable" element={<ClassTimetablePage />} />
             <Route path="/bmi-calculator" element={<BMICalculatorPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegistrationPage />} />
+            <Route path="/appointment" element={<AppointmentPage />} />
+            <Route path="/pricing" element={<PricingPage />} />
             <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
             <Route path="/user-dashboard" element={<UserDashboardPage />} />
           </Routes>

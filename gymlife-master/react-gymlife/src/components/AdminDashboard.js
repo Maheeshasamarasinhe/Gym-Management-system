@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import gymService from '../services/gymService';
+import { usersAPI, exercisesAPI, statsAPI } from '../services/api';
 
 const AdminDashboard = () => {
   const { user, logout, isAdmin } = useAuth();
@@ -20,10 +20,19 @@ const AdminDashboard = () => {
     loadData();
   }, []);
 
-  const loadData = () => {
-    setUsers(gymService.getUsers());
-    setExercises(gymService.getExercises());
-    setStats(gymService.getGymStats());
+  const loadData = async () => {
+    try {
+      const [usersRes, exercisesRes, statsRes] = await Promise.all([
+        usersAPI.getAll(),
+        exercisesAPI.getAll(),
+        statsAPI.getStats()
+      ]);
+      setUsers(usersRes.data);
+      setExercises(exercisesRes.data);
+      setStats(statsRes.data);
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
   };
 
   if (!isAdmin) {
@@ -36,48 +45,79 @@ const AdminDashboard = () => {
     navigate('/');
   };
 
-  const markAttendance = (userId) => {
-    gymService.markUserAttendance(userId);
-    loadData();
-  };
-
-  const updatePaymentStatus = (userId, status) => {
-    gymService.updateUserPaymentStatus(userId, status);
-    loadData();
-  };
-
-  const addExerciseToUser = (userId, exerciseId) => {
-    gymService.addExerciseToUserSchedule(userId, exerciseId, scheduleData);
-    setScheduleData({ sets: '', reps: '', notes: '' });
-    loadData();
-    // Update selected user if it's the same user
-    if (selectedUser && selectedUser.id === userId) {
-      setSelectedUser(gymService.getUserById(userId));
-    }
-  };
-
-  const removeExerciseFromUser = (userId, exerciseId) => {
-    gymService.removeExerciseFromUserSchedule(userId, exerciseId);
-    loadData();
-    if (selectedUser && selectedUser.id === userId) {
-      setSelectedUser(gymService.getUserById(userId));
-    }
-  };
-
-  const updateNutritionPlan = (userId, plan) => {
-    gymService.updateUserNutritionPlan(userId, plan);
-    loadData();
-    if (selectedUser && selectedUser.id === userId) {
-      setSelectedUser(gymService.getUserById(userId));
-    }
-  };
-
-  const addNewExercise = () => {
-    if (newExercise.name && newExercise.category) {
-      gymService.addExercise(newExercise);
-      setNewExercise({ name: '', category: '', difficulty: 'Beginner', description: '' });
-      setShowAddExercise(false);
+  const markAttendance = async (userId) => {
+    try {
+      await usersAPI.markAttendance(userId);
       loadData();
+    } catch (error) {
+      console.error('Error marking attendance:', error);
+    }
+  };
+
+  const updatePaymentStatus = async (userId, status) => {
+    try {
+      await usersAPI.update(userId, { payment_status: status });
+      loadData();
+    } catch (error) {
+      console.error('Error updating payment:', error);
+    }
+  };
+
+  const addExerciseToUser = async (userId, exerciseId) => {
+    try {
+      await exercisesAPI.assign({
+        user_id: userId,
+        exercise_id: exerciseId,
+        sets: scheduleData.sets,
+        notes: scheduleData.notes
+      });
+      setScheduleData({ sets: '', notes: '' });
+      loadData();
+      if (selectedUser && selectedUser.id === userId) {
+        const userRes = await usersAPI.getById(userId);
+        setSelectedUser(userRes.data);
+      }
+    } catch (error) {
+      console.error('Error adding exercise:', error);
+    }
+  };
+
+  const removeExerciseFromUser = async (userId, exerciseId) => {
+    try {
+      await exercisesAPI.removeFromSchedule(userId, exerciseId);
+      loadData();
+      if (selectedUser && selectedUser.id === userId) {
+        const userRes = await usersAPI.getById(userId);
+        setSelectedUser(userRes.data);
+      }
+    } catch (error) {
+      console.error('Error removing exercise:', error);
+    }
+  };
+
+  const updateNutritionPlan = async (userId, plan) => {
+    try {
+      await usersAPI.update(userId, { nutrition_plan: plan });
+      loadData();
+      if (selectedUser && selectedUser.id === userId) {
+        const userRes = await usersAPI.getById(userId);
+        setSelectedUser(userRes.data);
+      }
+    } catch (error) {
+      console.error('Error updating nutrition plan:', error);
+    }
+  };
+
+  const addNewExercise = async () => {
+    try {
+      if (newExercise.name && newExercise.category) {
+        await exercisesAPI.create(newExercise);
+        setNewExercise({ name: '', category: '', difficulty: 'Beginner', description: '' });
+        setShowAddExercise(false);
+        loadData();
+      }
+    } catch (error) {
+      console.error('Error adding exercise:', error);
     }
   };
 
