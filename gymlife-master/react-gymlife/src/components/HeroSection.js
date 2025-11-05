@@ -11,7 +11,7 @@ const HeroSection = () => {
                 <div className="hi-text" style={{ position: 'relative', top: 0, opacity: 1, zIndex: 10 }}>
                   <span style={{ position: 'relative', top: 0, opacity: 1, color: '#fff', display: 'block' }}>Shape your body</span>
                   <h1 style={{ position: 'relative', top: 0, opacity: 1, color: '#fff' }}>Be <strong>strong</strong> training hard</h1>
-                  <a href="#" className="primary-btn" style={{ position: 'relative', top: 0, opacity: 1 }}>Get Start</a>
+                  <a href="/register" className="primary-btn" style={{ position: 'relative', top: 0, opacity: 1 }}>Get Start</a>
                 </div>
               </div>
             </div>

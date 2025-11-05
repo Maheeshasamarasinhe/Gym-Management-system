@@ -50,7 +50,7 @@ const TeamSection = () => {
                 <span>Our Team</span>
                 <h2>TRAIN WITH EXPERTS</h2>
               </div>
-              <button className="primary-btn btn-normal appoinment-btn">appointment</button>
+              <a href="/appointment" className="primary-btn btn-normal appoinment-btn">appointment</a>
             </div>
           </div>
         </div>

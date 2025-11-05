@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import gymService from '../services/gymService';
+import { usersAPI } from '../services/api';
 
 const UserDashboard = () => {
   const { user, logout, isUser } = useAuth();
@@ -25,31 +25,14 @@ const UserDashboard = () => {
     }
   }, [user]);
 
-  const loadUserData = () => {
-    const userData = gymService.getUserById(user.id);
-    if (userData) {
+  const loadUserData = async () => {
+    try {
+      const response = await usersAPI.getById(user.id);
+      const userData = response.data;
       setUserProfile(userData);
       setFitnessData(userData.fitnessData || []);
-    } else {
-      // Fallback for demo user
-      const demoProfile = {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        phone: '123-456-7890',
-        membershipStatus: 'Active',
-        paymentStatus: 'Paid',
-        joinDate: '2024-01-15',
-        weight: '75kg',
-        height: '180cm',
-        fitnessLevel: 'Intermediate',
-        schedule: [],
-        nutritionPlan: '',
-        attendance: [],
-        fitnessData: []
-      };
-      setUserProfile(demoProfile);
-      setFitnessData([]);
+    } catch (error) {
+      console.error('Error loading user data:', error);
     }
   };
 
@@ -63,18 +46,32 @@ const UserDashboard = () => {
     navigate('/');
   };
 
-  const addFitnessEntry = () => {
-    if (newFitnessEntry.date && newFitnessEntry.weight) {
-      gymService.addUserFitnessData(user.id, newFitnessEntry);
-      setNewFitnessEntry({ date: '', weight: '', bodyFat: '', muscle: '', notes: '' });
-      setEditingFitness(false);
-      loadUserData();
+  const addFitnessEntry = async () => {
+    try {
+      if (newFitnessEntry.date && newFitnessEntry.weight) {
+        await usersAPI.addFitnessData(user.id, {
+          record_date: newFitnessEntry.date,
+          weight: newFitnessEntry.weight,
+          body_fat: newFitnessEntry.bodyFat,
+          muscle_mass: newFitnessEntry.muscle,
+          notes: newFitnessEntry.notes
+        });
+        setNewFitnessEntry({ date: '', weight: '', bodyFat: '', muscle: '', notes: '' });
+        setEditingFitness(false);
+        loadUserData();
+      }
+    } catch (error) {
+      console.error('Error adding fitness data:', error);
     }
   };
 
-  const deleteFitnessEntry = (id) => {
-    gymService.deleteUserFitnessData(user.id, id);
-    loadUserData();
+  const deleteFitnessEntry = async (id) => {
+    try {
+      await usersAPI.deleteFitnessData(user.id, id);
+      loadUserData();
+    } catch (error) {
+      console.error('Error deleting fitness data:', error);
+    }
   };
 
   return (
