@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
@@ -13,7 +13,17 @@ const RegistrationForm = () => {
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [selectedExpert, setSelectedExpert] = useState(null);
+  const [selectedPlan, setSelectedPlan] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const expert = localStorage.getItem('selectedExpert');
+    const plan = localStorage.getItem('selectedPlan');
+    if (expert) setSelectedExpert(JSON.parse(expert));
+    if (plan) setSelectedPlan(JSON.parse(plan));
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,6 +66,16 @@ const RegistrationForm = () => {
             <div className="section-title">
               <span>Join Us</span>
               <h2>Start Your Fitness Journey</h2>
+              {selectedExpert && (
+                <p style={{ color: '#c4c4c4', marginTop: '10px' }}>
+                  Expert: <span style={{ color: '#f36100' }}>{selectedExpert.name}</span> - {selectedExpert.specialty}
+                </p>
+              )}
+              {selectedPlan && (
+                <p style={{ color: '#c4c4c4', marginTop: '5px' }}>
+                  Plan: <span style={{ color: '#f36100' }}>{selectedPlan.name}</span> - {selectedPlan.price}
+                </p>
+              )}
             </div>
             <div className="contact-widget">
               <form onSubmit={handleSubmit}>

@@ -23,7 +23,7 @@ const AppointmentOptions = () => {
               <h4>Our Team</h4>
               <p>TRAIN WITH EXPERTS</p>
               <p>Meet our professional trainers and get personalized guidance for your fitness journey.</p>
-              <Link to="/team">Learn More</Link>
+              <Link to="/experts">Choose Expert</Link>
             </div>
           </div>
 
