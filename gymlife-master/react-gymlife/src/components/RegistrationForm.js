@@ -1,53 +1,84 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { authAPI } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
     password: '',
-    phone: '',
-    weight: '',
-    height: '',
-    fitnessLevel: 'Beginner'
+    confirmPassword: '',
+    role: 'CLIENT'
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [selectedExpert, setSelectedExpert] = useState(null);
-  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
-
-  useEffect(() => {
-    const expert = localStorage.getItem('selectedExpert');
-    const plan = localStorage.getItem('selectedPlan');
-    if (expert) setSelectedExpert(JSON.parse(expert));
-    if (plan) setSelectedPlan(JSON.parse(plan));
-  }, []);
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
 
-    try {
-      const response = await fetch('http://localhost:5000/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+    // Validate passwords match
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
 
-      if (response.ok) {
-        setSuccess('Registration successful! You can now login.');
-        setTimeout(() => navigate('/login'), 2000);
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters');
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const registerData = {
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+      };
+
+      let response;
+      if (formData.role === 'ADMIN') {
+        response = await authAPI.registerAdmin(registerData);
+      } else if (formData.role === 'TRAINER') {
+        response = await authAPI.registerTrainer(registerData);
       } else {
-        const data = await response.json();
-        setError(data.message || 'Registration failed');
+        response = await authAPI.registerClient(registerData);
       }
-    } catch (error) {
-      setError('Network error. Please try again.');
+
+      const authData = response.data; // { token, email, role, userId }
+
+      setSuccess('Registration successful! Redirecting...');
+
+      // Auto-login after registration
+      login(authData);
+
+      setTimeout(() => {
+        if (authData.role === 'ADMIN' || authData.role === 'TRAINER') {
+          navigate('/admin-dashboard');
+        } else {
+          navigate('/user-dashboard');
+        }
+      }, 1500);
+    } catch (err) {
+      if (err.response && err.response.data) {
+        const data = err.response.data;
+        // Handle validation errors (field-level)
+        if (data.details) {
+          const messages = Object.values(data.details).join('. ');
+          setError(messages);
+        } else {
+          setError(data.message || data.error || 'Registration failed');
+        }
+      } else {
+        setError('Network error. Please check your connection.');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -58,187 +89,107 @@ const RegistrationForm = () => {
     });
   };
 
+  const inputStyle = {
+    width: '100%',
+    height: '50px',
+    border: '1px solid #363636',
+    background: 'transparent',
+    color: '#c4c4c4',
+    paddingLeft: '20px',
+    marginBottom: '20px'
+  };
+
   return (
     <section className="contact-section spad">
       <div className="container">
         <div className="row">
-          <div className="col-lg-8 offset-lg-2">
+          <div className="col-lg-6 offset-lg-3">
             <div className="section-title">
               <span>Join Us</span>
-              <h2>Start Your Fitness Journey</h2>
-              {selectedExpert && (
-                <p style={{ color: '#c4c4c4', marginTop: '10px' }}>
-                  Expert: <span style={{ color: '#f36100' }}>{selectedExpert.name}</span> - {selectedExpert.specialty}
-                </p>
-              )}
-              {selectedPlan && (
-                <p style={{ color: '#c4c4c4', marginTop: '5px' }}>
-                  Plan: <span style={{ color: '#f36100' }}>{selectedPlan.name}</span> - {selectedPlan.price}
-                </p>
-              )}
+              <h2>Create Your Account</h2>
             </div>
             <div className="contact-widget">
               <form onSubmit={handleSubmit}>
                 {error && (
-                  <div style={{ color: '#f36100', marginBottom: '20px', textAlign: 'center' }}>
+                  <div style={{ color: '#f36100', marginBottom: '20px', textAlign: 'center', padding: '10px', border: '1px solid #f36100', borderRadius: '4px' }}>
                     {error}
                   </div>
                 )}
                 {success && (
-                  <div style={{ color: '#4CAF50', marginBottom: '20px', textAlign: 'center' }}>
+                  <div style={{ color: '#4CAF50', marginBottom: '20px', textAlign: 'center', padding: '10px', border: '1px solid #4CAF50', borderRadius: '4px' }}>
                     {success}
                   </div>
                 )}
 
-                <div className="row">
-                  <div className="col-lg-6">
-                    <input
-                      type="text"
-                      name="name"
-                      placeholder="Full Name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      style={{
-                        width: '100%',
-                        height: '50px',
-                        border: '1px solid #363636',
-                        background: 'transparent',
-                        color: '#c4c4c4',
-                        paddingLeft: '20px',
-                        marginBottom: '20px'
-                      }}
-                    />
-                  </div>
-                  <div className="col-lg-6">
-                    <input
-                      type="email"
-                      name="email"
-                      placeholder="Email Address"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      style={{
-                        width: '100%',
-                        height: '50px',
-                        border: '1px solid #363636',
-                        background: 'transparent',
-                        color: '#c4c4c4',
-                        paddingLeft: '20px',
-                        marginBottom: '20px'
-                      }}
-                    />
-                  </div>
+                <div style={{ marginBottom: '20px' }}>
+                  <label style={{ color: '#ffffff', display: 'block', marginBottom: '8px' }}>
+                    Register As:
+                  </label>
+                  <select
+                    name="role"
+                    value={formData.role}
+                    onChange={handleChange}
+                    style={{
+                      width: '100%',
+                      height: '50px',
+                      border: '1px solid #363636',
+                      background: 'transparent',
+                      color: '#c4c4c4',
+                      paddingLeft: '20px'
+                    }}
+                  >
+                    <option value="CLIENT" style={{ background: '#151515' }}>Client</option>
+                    <option value="ADMIN" style={{ background: '#151515' }}>Admin</option>
+                    <option value="TRAINER" style={{ background: '#151515' }}>Trainer</option>
+                  </select>
                 </div>
 
-                <div className="row">
-                  <div className="col-lg-6">
-                    <input
-                      type="password"
-                      name="password"
-                      placeholder="Password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      required
-                      style={{
-                        width: '100%',
-                        height: '50px',
-                        border: '1px solid #363636',
-                        background: 'transparent',
-                        color: '#c4c4c4',
-                        paddingLeft: '20px',
-                        marginBottom: '20px'
-                      }}
-                    />
-                  </div>
-                  <div className="col-lg-6">
-                    <input
-                      type="tel"
-                      name="phone"
-                      placeholder="Phone Number"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      style={{
-                        width: '100%',
-                        height: '50px',
-                        border: '1px solid #363636',
-                        background: 'transparent',
-                        color: '#c4c4c4',
-                        paddingLeft: '20px',
-                        marginBottom: '20px'
-                      }}
-                    />
-                  </div>
-                </div>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email Address"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  style={inputStyle}
+                />
 
-                <div className="row">
-                  <div className="col-lg-4">
-                    <input
-                      type="text"
-                      name="weight"
-                      placeholder="Weight (kg)"
-                      value={formData.weight}
-                      onChange={handleChange}
-                      style={{
-                        width: '100%',
-                        height: '50px',
-                        border: '1px solid #363636',
-                        background: 'transparent',
-                        color: '#c4c4c4',
-                        paddingLeft: '20px',
-                        marginBottom: '20px'
-                      }}
-                    />
-                  </div>
-                  <div className="col-lg-4">
-                    <input
-                      type="text"
-                      name="height"
-                      placeholder="Height (cm)"
-                      value={formData.height}
-                      onChange={handleChange}
-                      style={{
-                        width: '100%',
-                        height: '50px',
-                        border: '1px solid #363636',
-                        background: 'transparent',
-                        color: '#c4c4c4',
-                        paddingLeft: '20px',
-                        marginBottom: '20px'
-                      }}
-                    />
-                  </div>
-                  <div className="col-lg-4">
-                    <select
-                      name="fitnessLevel"
-                      value={formData.fitnessLevel}
-                      onChange={handleChange}
-                      style={{
-                        width: '100%',
-                        height: '50px',
-                        border: '1px solid #363636',
-                        background: 'transparent',
-                        color: '#c4c4c4',
-                        paddingLeft: '20px',
-                        marginBottom: '20px'
-                      }}
-                    >
-                      <option value="Beginner" style={{ background: '#151515' }}>Beginner</option>
-                      <option value="Intermediate" style={{ background: '#151515' }}>Intermediate</option>
-                      <option value="Advanced" style={{ background: '#151515' }}>Advanced</option>
-                    </select>
-                  </div>
-                </div>
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password (min 6 characters)"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  minLength={6}
+                  style={inputStyle}
+                />
 
-                <button type="submit" className="primary-btn" style={{ width: '100%' }}>
-                  Register Now
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="Confirm Password"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  required
+                  minLength={6}
+                  style={{ ...inputStyle, marginBottom: '30px' }}
+                />
+
+                <button
+                  type="submit"
+                  className="primary-btn"
+                  style={{ width: '100%', opacity: isLoading ? 0.7 : 1 }}
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Creating Account...' : 'Register Now'}
                 </button>
               </form>
 
               <div style={{ marginTop: '20px', textAlign: 'center' }}>
                 <p style={{ color: '#c4c4c4' }}>
-                  Already have an account? 
-                  <a href="/login" style={{ color: '#f36100', marginLeft: '5px' }}>Login here</a>
+                  Already have an account?
+                  <Link to="/login" style={{ color: '#f36100', marginLeft: '5px' }}>Login here</Link>
                 </p>
               </div>
             </div>

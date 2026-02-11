@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { usersAPI } from '../services/api';
+import { progressAPI } from '../services/api';
 
 const UserDashboard = () => {
-  const { user, logout, isUser } = useAuth();
+  const { user, logout, isClient } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('schedule');
   const [userProfile, setUserProfile] = useState({});
@@ -36,7 +36,7 @@ const UserDashboard = () => {
     }
   };
 
-  if (!isUser) {
+  if (!isClient) {
     navigate('/login');
     return null;
   }
