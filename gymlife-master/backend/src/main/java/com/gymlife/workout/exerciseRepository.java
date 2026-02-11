@@ -1,5 +1,5 @@
 package com.gymlife.workout;
 
-public class exerciseRepository {
+public interface exerciseRepository {
 
 }

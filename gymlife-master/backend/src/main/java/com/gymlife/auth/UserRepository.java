@@ -1,5 +1,5 @@
 package com.gymlife.auth;
 
-public class UserRepository {
+public interface UserRepository {
 
 }

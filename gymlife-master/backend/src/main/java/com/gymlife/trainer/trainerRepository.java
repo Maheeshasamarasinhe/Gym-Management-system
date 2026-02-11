@@ -1,5 +1,5 @@
 package com.gymlife.trainer;
 
-public class trainerRepository {
+public interface trainerRepository {
 
 }

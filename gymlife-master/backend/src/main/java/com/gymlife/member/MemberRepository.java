@@ -1,5 +1,5 @@
 package com.gymlife.member;
 
-public class MemberRepository {
+public interface memberRepository {
 
 }
