@@ -73,4 +73,14 @@ public class AuthController {
         }
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/login/trainer")
+    public ResponseEntity<AuthResponse> loginTrainer(@Valid @RequestBody LoginRequest request) {
+        AuthResponse response = authService.login(request);
+        if (!"TRAINER".equals(response.getRole())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(AuthResponse.builder().token(null).email(request.getEmail()).role(response.getRole()).build());
+        }
+        return ResponseEntity.ok(response);
+    }
 }

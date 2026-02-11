@@ -28,6 +28,8 @@ const LoginForm = () => {
       let response;
       if (formData.loginType === 'ADMIN') {
         response = await authAPI.loginAdmin(credentials);
+      } else if (formData.loginType === 'TRAINER') {
+        response = await authAPI.loginTrainer(credentials);
       } else {
         response = await authAPI.loginClient(credentials);
       }
@@ -103,6 +105,7 @@ const LoginForm = () => {
                     }}
                   >
                     <option value="CLIENT" style={{ background: '#151515' }}>Client</option>
+                    <option value="TRAINER" style={{ background: '#151515' }}>Trainer</option>
                     <option value="ADMIN" style={{ background: '#151515' }}>Admin</option>
                   </select>
                 </div>

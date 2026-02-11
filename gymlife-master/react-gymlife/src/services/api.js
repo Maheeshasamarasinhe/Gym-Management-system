@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'http://localhost:8081/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -39,6 +39,7 @@ export const authAPI = {
 
   // Role-specific login
   loginAdmin: (credentials) => api.post('/auth/login/admin', credentials),
+  loginTrainer: (credentials) => api.post('/auth/login/trainer', credentials),
   loginClient: (credentials) => api.post('/auth/login/client', credentials),
 
   // Role-specific register
