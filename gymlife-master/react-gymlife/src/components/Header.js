@@ -6,7 +6,7 @@ const Header = ({ activePage }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const { user, logout, isAdmin, isUser } = useAuth();
+  const { user, logout, isAdmin, isClient } = useAuth();
   
   const getActiveClass = (page) => {
     if (activePage === page) return 'active';

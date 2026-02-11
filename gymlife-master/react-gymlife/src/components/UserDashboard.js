@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { usersAPI } from '../services/api';
+import { progressAPI, notificationsAPI } from '../services/api';
 
 const UserDashboard = () => {
-  const { user, logout, isUser } = useAuth();
+  const { user, logout, isClient } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('schedule');
   const [userProfile, setUserProfile] = useState({});
@@ -27,7 +27,7 @@ const UserDashboard = () => {
 
   const loadUserData = async () => {
     try {
-      const response = await usersAPI.getById(user.id);
+      const response = await progressAPI.getMyData();
       const userData = response.data;
       setUserProfile(userData);
       setFitnessData(userData.fitnessData || []);
@@ -36,7 +36,7 @@ const UserDashboard = () => {
     }
   };
 
-  if (!isUser) {
+  if (!isClient) {
     navigate('/login');
     return null;
   }
@@ -49,12 +49,10 @@ const UserDashboard = () => {
   const addFitnessEntry = async () => {
     try {
       if (newFitnessEntry.date && newFitnessEntry.weight) {
-        await usersAPI.addFitnessData(user.id, {
-          record_date: newFitnessEntry.date,
-          weight: newFitnessEntry.weight,
-          body_fat: newFitnessEntry.bodyFat,
-          muscle_mass: newFitnessEntry.muscle,
-          notes: newFitnessEntry.notes
+        await progressAPI.add({
+          month: newFitnessEntry.date,
+          weight: parseFloat(newFitnessEntry.weight),
+          chest: parseFloat(newFitnessEntry.muscle) || 0
         });
         setNewFitnessEntry({ date: '', weight: '', bodyFat: '', muscle: '', notes: '' });
         setEditingFitness(false);
@@ -67,7 +65,7 @@ const UserDashboard = () => {
 
   const deleteFitnessEntry = async (id) => {
     try {
-      await usersAPI.deleteFitnessData(user.id, id);
+      await progressAPI.remove(id);
       loadUserData();
     } catch (error) {
       console.error('Error deleting fitness data:', error);

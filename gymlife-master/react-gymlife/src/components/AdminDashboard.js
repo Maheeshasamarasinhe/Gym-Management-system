@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { usersAPI, exercisesAPI, statsAPI } from '../services/api';
+import { membersAPI, exercisesAPI, trainersAPI, attendanceAPI, paymentsAPI, nutritionAPI, scheduleAPI } from '../services/api';
 
 const AdminDashboard = () => {
   const { user, logout, isAdmin } = useAuth();
@@ -11,7 +11,7 @@ const AdminDashboard = () => {
   const [exercises, setExercises] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [stats, setStats] = useState({});
-  const [newExercise, setNewExercise] = useState({ name: '', category: '', difficulty: 'Beginner', description: '' });
+  const [newExercise, setNewExercise] = useState({ name: '', steps: 0, rounds: 0, image_url: '', video_url: '' });
   const [showAddExercise, setShowAddExercise] = useState(false);
   const [scheduleData, setScheduleData] = useState({ sets: '', reps: '', notes: '' });
 
@@ -22,14 +22,12 @@ const AdminDashboard = () => {
 
   const loadData = async () => {
     try {
-      const [usersRes, exercisesRes, statsRes] = await Promise.all([
-        usersAPI.getAll(),
+      const [usersRes, exercisesRes] = await Promise.all([
+        membersAPI.getAll(),
         exercisesAPI.getAll(),
-        statsAPI.getStats()
       ]);
       setUsers(usersRes.data);
       setExercises(exercisesRes.data);
-      setStats(statsRes.data);
     } catch (error) {
       console.error('Error loading data:', error);
     }
@@ -47,7 +45,7 @@ const AdminDashboard = () => {
 
   const markAttendance = async (userId) => {
     try {
-      await usersAPI.markAttendance(userId);
+      await attendanceAPI.create({ member_id: userId, attend_date: new Date().toISOString().split('T')[0] });
       loadData();
     } catch (error) {
       console.error('Error marking attendance:', error);
@@ -56,7 +54,7 @@ const AdminDashboard = () => {
 
   const updatePaymentStatus = async (userId, status) => {
     try {
-      await usersAPI.update(userId, { payment_status: status });
+      await paymentsAPI.create({ member_id: userId, payment_date: new Date().toISOString().split('T')[0], payment_month: new Date().toLocaleString('default', { month: 'long', year: 'numeric' }), status: status });
       loadData();
     } catch (error) {
       console.error('Error updating payment:', error);
@@ -65,16 +63,16 @@ const AdminDashboard = () => {
 
   const addExerciseToUser = async (userId, exerciseId) => {
     try {
-      await exercisesAPI.assign({
-        user_id: userId,
-        exercise_id: exerciseId,
-        sets: scheduleData.sets,
-        notes: scheduleData.notes
+      await scheduleAPI.create({
+        member_id: userId,
+        exercise_name: exercises.find(e => e.id === exerciseId)?.name || '',
+        steps: parseInt(scheduleData.sets) || 0,
+        rounds: parseInt(scheduleData.notes) || 0
       });
       setScheduleData({ sets: '', notes: '' });
       loadData();
       if (selectedUser && selectedUser.id === userId) {
-        const userRes = await usersAPI.getById(userId);
+        const userRes = await membersAPI.getById(userId);
         setSelectedUser(userRes.data);
       }
     } catch (error) {
@@ -84,10 +82,10 @@ const AdminDashboard = () => {
 
   const removeExerciseFromUser = async (userId, exerciseId) => {
     try {
-      await exercisesAPI.removeFromSchedule(userId, exerciseId);
+      await scheduleAPI.remove(exerciseId);
       loadData();
       if (selectedUser && selectedUser.id === userId) {
-        const userRes = await usersAPI.getById(userId);
+        const userRes = await membersAPI.getById(userId);
         setSelectedUser(userRes.data);
       }
     } catch (error) {
@@ -97,10 +95,10 @@ const AdminDashboard = () => {
 
   const updateNutritionPlan = async (userId, plan) => {
     try {
-      await usersAPI.update(userId, { nutrition_plan: plan });
+      await nutritionAPI.create({ member_id: userId, ...plan });
       loadData();
       if (selectedUser && selectedUser.id === userId) {
-        const userRes = await usersAPI.getById(userId);
+        const userRes = await membersAPI.getById(userId);
         setSelectedUser(userRes.data);
       }
     } catch (error) {
@@ -110,9 +108,9 @@ const AdminDashboard = () => {
 
   const addNewExercise = async () => {
     try {
-      if (newExercise.name && newExercise.category) {
+      if (newExercise.name) {
         await exercisesAPI.create(newExercise);
-        setNewExercise({ name: '', category: '', difficulty: 'Beginner', description: '' });
+        setNewExercise({ name: '', steps: 0, rounds: 0, image_url: '', video_url: '' });
         setShowAddExercise(false);
         loadData();
       }

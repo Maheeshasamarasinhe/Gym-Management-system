@@ -1,5 +1,5 @@
 package com.gymlife.nutrition;
 
-public class nutritionPlan {
+public class NutritionPlan {
 
 }

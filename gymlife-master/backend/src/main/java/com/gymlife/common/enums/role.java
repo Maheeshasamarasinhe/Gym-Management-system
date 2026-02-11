@@ -1,5 +1,7 @@
 package com.gymlife.common.enums;
 
-public class role {
-
+public enum Role {
+    ADMIN,
+    TRAINER,
+    CLIENT
 }

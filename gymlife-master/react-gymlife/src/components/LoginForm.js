@@ -1,36 +1,65 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { authAPI } from '../services/api';
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    role: 'user'
+    loginType: 'CLIENT'
   });
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setIsLoading(true);
 
     try {
-      const response = await authAPI.login(formData);
-      const { token, user } = response.data;
-      
-      localStorage.setItem('token', token);
-      login(user);
-      
-      if (user.role === 'admin') {
+      const credentials = {
+        email: formData.email,
+        password: formData.password,
+      };
+
+      let response;
+      if (formData.loginType === 'ADMIN') {
+        response = await authAPI.loginAdmin(credentials);
+      } else if (formData.loginType === 'TRAINER') {
+        response = await authAPI.loginTrainer(credentials);
+      } else {
+        response = await authAPI.loginClient(credentials);
+      }
+
+      const authData = response.data; // { token, email, role, userId }
+
+      if (!authData.token) {
+        setError('Access denied. You do not have permission for this role.');
+        setIsLoading(false);
+        return;
+      }
+
+      login(authData);
+
+      if (authData.role === 'ADMIN') {
+        navigate('/admin-dashboard');
+      } else if (authData.role === 'TRAINER') {
         navigate('/admin-dashboard');
       } else {
         navigate('/user-dashboard');
       }
-    } catch (error) {
-      setError('Invalid credentials or role selection');
+    } catch (err) {
+      if (err.response && err.response.data) {
+        const data = err.response.data;
+        setError(data.message || data.error || 'Invalid email or password');
+      } else {
+        setError('Network error. Please check your connection.');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -53,18 +82,18 @@ const LoginForm = () => {
             <div className="contact-widget">
               <form onSubmit={handleSubmit}>
                 {error && (
-                  <div style={{ color: '#f36100', marginBottom: '20px', textAlign: 'center' }}>
+                  <div style={{ color: '#f36100', marginBottom: '20px', textAlign: 'center', padding: '10px', border: '1px solid #f36100', borderRadius: '4px' }}>
                     {error}
                   </div>
                 )}
-                
+
                 <div style={{ marginBottom: '20px' }}>
                   <label style={{ color: '#ffffff', display: 'block', marginBottom: '8px' }}>
                     Login As:
                   </label>
                   <select
-                    name="role"
-                    value={formData.role}
+                    name="loginType"
+                    value={formData.loginType}
                     onChange={handleChange}
                     style={{
                       width: '100%',
@@ -75,8 +104,9 @@ const LoginForm = () => {
                       paddingLeft: '20px'
                     }}
                   >
-                    <option value="user" style={{ background: '#151515' }}>User</option>
-                    <option value="admin" style={{ background: '#151515' }}>Admin</option>
+                    <option value="CLIENT" style={{ background: '#151515' }}>Client</option>
+                    <option value="TRAINER" style={{ background: '#151515' }}>Trainer</option>
+                    <option value="ADMIN" style={{ background: '#151515' }}>Admin</option>
                   </select>
                 </div>
 
@@ -105,6 +135,7 @@ const LoginForm = () => {
                   value={formData.password}
                   onChange={handleChange}
                   required
+                  minLength={6}
                   style={{
                     width: '100%',
                     height: '50px',
@@ -116,15 +147,21 @@ const LoginForm = () => {
                   }}
                 />
 
-                <button type="submit" className="primary-btn" style={{ width: '100%' }}>
-                  Login
+                <button
+                  type="submit"
+                  className="primary-btn"
+                  style={{ width: '100%', opacity: isLoading ? 0.7 : 1 }}
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Logging in...' : 'Login'}
                 </button>
               </form>
 
-              <div style={{ marginTop: '30px', textAlign: 'center', color: '#c4c4c4' }}>
-                <h5 style={{ color: '#ffffff', marginBottom: '15px' }}>Demo Accounts:</h5>
-                <p>Admin: admin@gym.com / admin123</p>
-                <p>User: user@gym.com / user123</p>
+              <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                <p style={{ color: '#c4c4c4' }}>
+                  Don't have an account?
+                  <Link to="/register" style={{ color: '#f36100', marginLeft: '5px' }}>Register here</Link>
+                </p>
               </div>
             </div>
           </div>

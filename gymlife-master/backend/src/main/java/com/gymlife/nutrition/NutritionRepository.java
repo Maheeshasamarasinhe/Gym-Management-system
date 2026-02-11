@@ -1,5 +1,5 @@
 package com.gymlife.nutrition;
 
-public interface nutritionRepository {
+public interface NutritionRepository {
 
 }

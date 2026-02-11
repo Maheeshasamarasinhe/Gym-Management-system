@@ -1,5 +1,5 @@
 package com.gymlife.nutrition;
 
-public class nutritionController {
+public class NutritionController {
 
 }

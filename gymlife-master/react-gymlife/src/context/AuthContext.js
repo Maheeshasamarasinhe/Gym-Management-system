@@ -15,22 +15,35 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is logged in from localStorage
+    // Restore user session from localStorage
     const savedUser = localStorage.getItem('gymUser');
-    if (savedUser) {
+    const token = localStorage.getItem('token');
+    if (savedUser && token) {
       setUser(JSON.parse(savedUser));
+    } else {
+      // Clear stale data
+      localStorage.removeItem('gymUser');
+      localStorage.removeItem('token');
     }
     setLoading(false);
   }, []);
 
-  const login = (userData) => {
+  const login = (authResponse) => {
+    // authResponse = { token, email, role, userId }
+    const userData = {
+      id: authResponse.userId,
+      email: authResponse.email,
+      role: authResponse.role,  // ADMIN | TRAINER | CLIENT
+    };
     setUser(userData);
+    localStorage.setItem('token', authResponse.token);
     localStorage.setItem('gymUser', JSON.stringify(userData));
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('gymUser');
+    localStorage.removeItem('token');
   };
 
   const value = {
@@ -38,8 +51,9 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     loading,
-    isAdmin: user?.role === 'admin',
-    isUser: user?.role === 'user'
+    isAdmin: user?.role === 'ADMIN',
+    isTrainer: user?.role === 'TRAINER',
+    isClient: user?.role === 'CLIENT',
   };
 
   return (

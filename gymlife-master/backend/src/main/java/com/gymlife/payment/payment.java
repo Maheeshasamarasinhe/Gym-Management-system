@@ -1,5 +1,5 @@
 package com.gymlife.payment;
 
-public class payment {
+public class Payment {
 
 }
