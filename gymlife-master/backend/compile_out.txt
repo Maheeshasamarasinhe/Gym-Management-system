@@ -1,0 +1,219 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------< com.gymlife:gym-management-backend >-----------------
+[INFO] Building Gym Management Backend 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ gym-management-backend ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ gym-management-backend ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 42 source files with javac [debug release 17] to target\classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/Attendance/attendanceController.java:[3,8] class AttendanceController is public, should be declared in a file named AttendanceController.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/member/notification.java:[3,8] class Notification is public, should be declared in a file named Notification.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/nutrition/NutritionRepository.java:[3,8] interface nutritionRepository is public, should be declared in a file named nutritionRepository.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/common/enums/role.java:[3,8] enum Role is public, should be declared in a file named Role.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/member/member.java:[3,8] class Member is public, should be declared in a file named Member.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/member/MemberRepository.java:[3,8] interface memberRepository is public, should be declared in a file named memberRepository.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/payment/paymentController.java:[3,8] class PaymentController is public, should be declared in a file named PaymentController.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/member/progress.java:[3,8] class Progress is public, should be declared in a file named Progress.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/member/memberController.java:[3,8] class MemberController is public, should be declared in a file named MemberController.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/member/memberService.java:[3,8] class MemberService is public, should be declared in a file named MemberService.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/payment/PaymentRepository.java:[3,8] interface paymentRepository is public, should be declared in a file named paymentRepository.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[29,49] cannot find symbol
+  symbol:   method getEmail()
+  location: variable request of type com.gymlife.auth.dto.RegisterRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[35,40] cannot find symbol
+  symbol:   method getRole()
+  location: variable request of type com.gymlife.auth.dto.RegisterRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[40,25] cannot find symbol
+  symbol:   method builder()
+  location: class com.gymlife.auth.User
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[41,31] cannot find symbol
+  symbol:   method getEmail()
+  location: variable request of type com.gymlife.auth.dto.RegisterRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[42,57] cannot find symbol
+  symbol:   method getPassword()
+  location: variable request of type com.gymlife.auth.dto.RegisterRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[50,28] cannot find symbol
+  symbol:   method builder()
+  location: class com.gymlife.auth.dto.AuthResponse
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[52,28] cannot find symbol
+  symbol:   method getEmail()
+  location: variable user of type com.gymlife.auth.User
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[53,27] cannot find symbol
+  symbol:   method getRole()
+  location: variable user of type com.gymlife.auth.User
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[54,29] cannot find symbol
+  symbol:   method getId()
+  location: variable user of type com.gymlife.auth.User
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[65,36] cannot find symbol
+  symbol:   method getEmail()
+  location: variable request of type com.gymlife.auth.dto.LoginRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[66,36] cannot find symbol
+  symbol:   method getPassword()
+  location: variable request of type com.gymlife.auth.dto.LoginRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[73,55] cannot find symbol
+  symbol:   method getEmail()
+  location: variable request of type com.gymlife.auth.dto.LoginRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[78,28] cannot find symbol
+  symbol:   method builder()
+  location: class com.gymlife.auth.dto.AuthResponse
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[80,28] cannot find symbol
+  symbol:   method getEmail()
+  location: variable user of type com.gymlife.auth.User
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[81,27] cannot find symbol
+  symbol:   method getRole()
+  location: variable user of type com.gymlife.auth.User
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[82,29] cannot find symbol
+  symbol:   method getId()
+  location: variable user of type com.gymlife.auth.User
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/User.java:[20,8] com.gymlife.auth.User is not abstract and does not override abstract method getPassword() in org.springframework.security.core.userdetails.UserDetails
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[29,16] cannot find symbol
+  symbol:   method setRole(java.lang.String)
+  location: variable request of type @jakarta.validation.Valid com.gymlife.auth.dto.RegisterRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[36,16] cannot find symbol
+  symbol:   method setRole(java.lang.String)
+  location: variable request of type @jakarta.validation.Valid com.gymlife.auth.dto.RegisterRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[43,16] cannot find symbol
+  symbol:   method setRole(java.lang.String)
+  location: variable request of type @jakarta.validation.Valid com.gymlife.auth.dto.RegisterRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[60,37] cannot find symbol
+  symbol:   method getRole()
+  location: variable response of type com.gymlife.auth.dto.AuthResponse
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[62,39] cannot find symbol
+  symbol:   method builder()
+  location: class com.gymlife.auth.dto.AuthResponse
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[62,75] cannot find symbol
+  symbol:   method getEmail()
+  location: variable request of type @jakarta.validation.Valid com.gymlife.auth.dto.LoginRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[62,101] cannot find symbol
+  symbol:   method getRole()
+  location: variable response of type com.gymlife.auth.dto.AuthResponse
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[70,38] cannot find symbol
+  symbol:   method getRole()
+  location: variable response of type com.gymlife.auth.dto.AuthResponse
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[72,39] cannot find symbol
+  symbol:   method builder()
+  location: class com.gymlife.auth.dto.AuthResponse
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[72,75] cannot find symbol
+  symbol:   method getEmail()
+  location: variable request of type @jakarta.validation.Valid com.gymlife.auth.dto.LoginRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[72,101] cannot find symbol
+  symbol:   method getRole()
+  location: variable response of type com.gymlife.auth.dto.AuthResponse
+[INFO] 39 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.675 s
+[INFO] Finished at: 2026-02-11T21:24:01+05:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project gym-management-backend: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/Attendance/attendanceController.java:[3,8] class AttendanceController is public, should be declared in a file named AttendanceController.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/member/notification.java:[3,8] class Notification is public, should be declared in a file named Notification.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/nutrition/NutritionRepository.java:[3,8] interface nutritionRepository is public, should be declared in a file named nutritionRepository.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/common/enums/role.java:[3,8] enum Role is public, should be declared in a file named Role.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/member/member.java:[3,8] class Member is public, should be declared in a file named Member.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/member/MemberRepository.java:[3,8] interface memberRepository is public, should be declared in a file named memberRepository.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/payment/paymentController.java:[3,8] class PaymentController is public, should be declared in a file named PaymentController.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/member/progress.java:[3,8] class Progress is public, should be declared in a file named Progress.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/member/memberController.java:[3,8] class MemberController is public, should be declared in a file named MemberController.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/member/memberService.java:[3,8] class MemberService is public, should be declared in a file named MemberService.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/payment/PaymentRepository.java:[3,8] interface paymentRepository is public, should be declared in a file named paymentRepository.java
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[29,49] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable request of type com.gymlife.auth.dto.RegisterRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[35,40] cannot find symbol
+[ERROR]   symbol:   method getRole()
+[ERROR]   location: variable request of type com.gymlife.auth.dto.RegisterRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[40,25] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.gymlife.auth.User
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[41,31] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable request of type com.gymlife.auth.dto.RegisterRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[42,57] cannot find symbol
+[ERROR]   symbol:   method getPassword()
+[ERROR]   location: variable request of type com.gymlife.auth.dto.RegisterRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[50,28] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.gymlife.auth.dto.AuthResponse
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[52,28] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable user of type com.gymlife.auth.User
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[53,27] cannot find symbol
+[ERROR]   symbol:   method getRole()
+[ERROR]   location: variable user of type com.gymlife.auth.User
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[54,29] cannot find symbol
+[ERROR]   symbol:   method getId()
+[ERROR]   location: variable user of type com.gymlife.auth.User
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[65,36] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable request of type com.gymlife.auth.dto.LoginRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[66,36] cannot find symbol
+[ERROR]   symbol:   method getPassword()
+[ERROR]   location: variable request of type com.gymlife.auth.dto.LoginRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[73,55] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable request of type com.gymlife.auth.dto.LoginRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[78,28] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.gymlife.auth.dto.AuthResponse
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[80,28] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable user of type com.gymlife.auth.User
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[81,27] cannot find symbol
+[ERROR]   symbol:   method getRole()
+[ERROR]   location: variable user of type com.gymlife.auth.User
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthService.java:[82,29] cannot find symbol
+[ERROR]   symbol:   method getId()
+[ERROR]   location: variable user of type com.gymlife.auth.User
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/User.java:[20,8] com.gymlife.auth.User is not abstract and does not override abstract method getPassword() in org.springframework.security.core.userdetails.UserDetails
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[29,16] cannot find symbol
+[ERROR]   symbol:   method setRole(java.lang.String)
+[ERROR]   location: variable request of type @jakarta.validation.Valid com.gymlife.auth.dto.RegisterRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[36,16] cannot find symbol
+[ERROR]   symbol:   method setRole(java.lang.String)
+[ERROR]   location: variable request of type @jakarta.validation.Valid com.gymlife.auth.dto.RegisterRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[43,16] cannot find symbol
+[ERROR]   symbol:   method setRole(java.lang.String)
+[ERROR]   location: variable request of type @jakarta.validation.Valid com.gymlife.auth.dto.RegisterRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[60,37] cannot find symbol
+[ERROR]   symbol:   method getRole()
+[ERROR]   location: variable response of type com.gymlife.auth.dto.AuthResponse
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[62,39] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.gymlife.auth.dto.AuthResponse
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[62,75] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable request of type @jakarta.validation.Valid com.gymlife.auth.dto.LoginRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[62,101] cannot find symbol
+[ERROR]   symbol:   method getRole()
+[ERROR]   location: variable response of type com.gymlife.auth.dto.AuthResponse
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[70,38] cannot find symbol
+[ERROR]   symbol:   method getRole()
+[ERROR]   location: variable response of type com.gymlife.auth.dto.AuthResponse
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[72,39] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.gymlife.auth.dto.AuthResponse
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[72,75] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable request of type @jakarta.validation.Valid com.gymlife.auth.dto.LoginRequest
+[ERROR] /C:/Users/ASUS/Documents/GitHub/Gym-Management-system/gymlife-master/backend/src/main/java/com/gymlife/auth/AuthController.java:[72,101] cannot find symbol
+[ERROR]   symbol:   method getRole()
+[ERROR]   location: variable response of type com.gymlife.auth.dto.AuthResponse
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
