@@ -1,5 +1,5 @@
 package com.gymlife.payment;
 
-public class paymentService {
+public class PaymentService {
 
 }
