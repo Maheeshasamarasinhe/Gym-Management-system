@@ -1,0 +1,45 @@
+QUICK FIX - Follow these steps IN ORDER:
+===========================================
+
+1. CLOSE IntelliJ IDEA completely
+
+2. REOPEN IntelliJ IDEA and load this project
+
+3. You should see a notification about project changes
+   → Click "Load Maven Changes" or "Reload"
+
+4. Go to: File → Project Structure (Ctrl+Alt+Shift+S)
+   → Project → SDK
+   → If it shows "24" or anything other than "17":
+      • Click the dropdown
+      • Select "17" (if available)
+      • If NOT available:
+         - Click "Add SDK" → "Download JDK"
+         - Version: 17
+         - Vendor: Amazon Corretto 17 (or any other)
+         - Click Download
+   → Language level: Set to "17"
+   → Click "Apply" → Click "OK"
+
+5. Right-click on pom.xml in Project view
+   → Maven → Reload Project
+
+6. Go to: Build → Rebuild Project
+
+7. Wait for the build to complete
+
+8. Try running GymManagementApplication.java
+
+EXPECTED RESULT: No errors, application should compile and run!
+
+If it STILL doesn't work:
+--------------------------
+• File → Invalidate Caches → Invalidate and Restart
+• After restart, repeat steps 3-7
+
+Alternative (Command Line):
+--------------------------
+Open terminal in this folder and run:
+  mvnw.cmd clean compile
+
+This will use Maven with the correct Java version.
