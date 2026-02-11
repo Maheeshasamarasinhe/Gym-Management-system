@@ -52,7 +52,7 @@
    ```
 
 4. **Verify installation**:
-   - Open browser and go to `http://localhost:5000/api/health`
+   - Open browser and go to `http://localhost:8081/api/health`
    - You should see: `{"message": "Gym Management API is running"}`
 
 ## Frontend Setup
