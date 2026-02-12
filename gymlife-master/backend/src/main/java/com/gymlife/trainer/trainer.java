@@ -1,9 +1,8 @@
 package com.gymlife.trainer;
 
+import com.gymlife.auth.User;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "trainers")
@@ -15,39 +14,32 @@ public class Trainer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private User user;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    private String experience;
+
+    @Column(length = 20)
+    private String phone;
+
     private String email;
 
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    private String instagram;
 
-    @Column(name = "specialization")
-    private String specialization;
+    private String facebook;
 
-    @Column(name = "experience_years")
-    private Integer experienceYears;
+    @Column(name = "profile_picture", length = 500)
+    private String profilePicture;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
+    @Column(nullable = false, length = 20)
+    @Builder.Default
+    private String status = "ACTIVE";
 }
 
 
