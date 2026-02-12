@@ -10,6 +10,7 @@ C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\
 C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\config\SecurityConfig.java
 C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\nutrition\NutritionRepository.java
 C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\auth\dto\LoginRequest.java
+C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\member\NotificationRepository.java
 C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\nutrition\NutritionService.java
 C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\payment\PaymentRepository.java
 C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\member\Notification.java
@@ -25,6 +26,7 @@ C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\
 C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\auth\User.java
 C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\nutrition\NutritionPlan.java
 C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\config\JwtUtil.java
+C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\member\ProgressRepository.java
 C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\workout\scheduleRepository.java
 C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\auth\AuthController.java
 C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\workout\scheduleController.java
@@ -37,6 +39,7 @@ C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\
 C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\Attendance\attendance.java
 C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\member\MemberController.java
 C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\member\MemberService.java
+C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\nutrition\NutritionPlanDTO.java
 C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\payment\PaymentController.java
 C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\member\Progress.java
 C:\Users\ASUS\Documents\GitHub\Gym-Management-system\gymlife-master\backend\src\main\java\com\gymlife\trainer\Trainer.java

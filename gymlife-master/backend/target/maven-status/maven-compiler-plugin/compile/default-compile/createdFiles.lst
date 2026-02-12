@@ -1,7 +1,9 @@
+com\gymlife\member\ProgressRepository.class
 com\gymlife\Attendance\attendance.class
 com\gymlife\member\MemberController.class
 com\gymlife\workout\schedule.class
 com\gymlife\workout\exerciseRepository.class
+com\gymlife\member\Progress$ProgressBuilder.class
 com\gymlife\member\Progress.class
 com\gymlife\nutrition\NutritionController.class
 com\gymlife\nutrition\NutritionRepository.class
@@ -9,7 +11,10 @@ com\gymlife\config\CustomUserDetailsService.class
 com\gymlife\GymManagementApplication.class
 com\gymlife\payment\PaymentService.class
 com\gymlife\member\MemberService.class
+com\gymlife\nutrition\NutritionPlanDTO.class
 com\gymlife\config\SecurityConfig.class
+com\gymlife\member\Notification$NotificationBuilder.class
+com\gymlife\nutrition\NutritionPlan$NutritionPlanBuilder.class
 com\gymlife\auth\dto\RegisterRequest.class
 com\gymlife\auth\dto\AuthResponse.class
 com\gymlife\workout\exerciseController.class
@@ -37,8 +42,11 @@ com\gymlife\member\MemberRepository.class
 com\gymlife\trainer\TrainerService.class
 com\gymlife\auth\AuthService.class
 com\gymlife\auth\dto\RegisterRequest$RegisterRequestBuilder.class
+com\gymlife\member\Member$MemberBuilder.class
+com\gymlife\nutrition\NutritionPlanDTO$NutritionPlanDTOBuilder.class
 com\gymlife\auth\AuthController.class
 com\gymlife\auth\UserRepository.class
+com\gymlife\member\NotificationRepository.class
 com\gymlife\workout\scheduleRepository.class
 com\gymlife\auth\dto\AuthResponse$AuthResponseBuilder.class
 com\gymlife\auth\User.class
