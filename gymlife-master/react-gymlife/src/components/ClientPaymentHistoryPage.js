@@ -34,9 +34,9 @@ const ClientPaymentHistoryPage = () => {
 
   const getStatusStyle = (status) => {
     switch (status) {
-      case 'paid': return { background: 'rgba(78, 205, 196, 0.15)', color: '#4ECDC4', border: '1px solid rgba(78, 205, 196, 0.3)' };
-      case 'pending': return { background: 'rgba(247, 147, 30, 0.15)', color: '#F7931E', border: '1px solid rgba(247, 147, 30, 0.3)' };
-      case 'overdue': return { background: 'rgba(255, 107, 107, 0.15)', color: '#FF6B6B', border: '1px solid rgba(255, 107, 107, 0.3)' };
+      case 'paid': return { background: '#252525', color: '#f36100', border: '1px solid #464646' };
+      case 'pending': return { background: '#252525', color: '#F7931E', border: '1px solid #464646' };
+      case 'overdue': return { background: '#252525', color: '#a9a9a9', border: '1px solid #464646' };
       default: return {};
     }
   };
@@ -53,7 +53,7 @@ const ClientPaymentHistoryPage = () => {
   return (
     <div style={styles.container}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Muli:wght@300;400;600;700&display=swap');
 
         @keyframes slideIn {
           from { opacity: 0; transform: translateY(20px); }
@@ -66,7 +66,8 @@ const ClientPaymentHistoryPage = () => {
         }
 
         .summary-card:hover {
-          transform: translateY(-4px);
+          border-left: 4px solid #f36100;
+          background: #252525 !important;
         }
 
         .payment-row {
@@ -75,7 +76,7 @@ const ClientPaymentHistoryPage = () => {
         }
 
         .payment-row:hover {
-          background: rgba(255, 255, 255, 0.05) !important;
+          background: #252525 !important;
         }
       `}</style>
 
@@ -90,10 +91,10 @@ const ClientPaymentHistoryPage = () => {
       <div style={styles.summaryGrid}>
         <div className="summary-card" style={{ ...styles.summaryCard, animationDelay: '0s' }}>
           <div style={styles.summaryIcon}>
-            <TrendingUp size={24} color="#4ECDC4" />
+            <TrendingUp size={24} color="#f36100" />
           </div>
           <div style={styles.summaryLabel}>Total Paid</div>
-          <div style={{ ...styles.summaryValue, color: '#4ECDC4' }}>
+          <div style={{ ...styles.summaryValue, color: '#f36100' }}>
             ${totalPaid.toFixed(2)}
           </div>
         </div>
@@ -108,19 +109,19 @@ const ClientPaymentHistoryPage = () => {
         </div>
         <div className="summary-card" style={{ ...styles.summaryCard, animationDelay: '0.2s' }}>
           <div style={styles.summaryIcon}>
-            <AlertCircle size={24} color="#FF6B6B" />
+            <AlertCircle size={24} color="#a9a9a9" />
           </div>
           <div style={styles.summaryLabel}>Overdue</div>
-          <div style={{ ...styles.summaryValue, color: '#FF6B6B' }}>
+          <div style={{ ...styles.summaryValue, color: '#a9a9a9' }}>
             ${overdueAmount.toFixed(2)}
           </div>
         </div>
         <div className="summary-card" style={{ ...styles.summaryCard, animationDelay: '0.3s' }}>
           <div style={styles.summaryIcon}>
-            <CreditCard size={24} color="#FF6B35" />
+            <CreditCard size={24} color="#f36100" />
           </div>
           <div style={styles.summaryLabel}>Current Plan</div>
-          <div style={{ ...styles.summaryValue, color: '#FF6B35', fontSize: '24px' }}>
+          <div style={{ ...styles.summaryValue, color: '#f36100', fontSize: '24px' }}>
             Monthly
           </div>
         </div>
@@ -216,18 +217,18 @@ const ClientPaymentHistoryPage = () => {
 const styles = {
   container: {
     padding: '40px',
-    fontFamily: "'Work Sans', sans-serif",
+    fontFamily: "'Muli', sans-serif",
   },
   header: { marginBottom: '48px' },
   title: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '56px',
     color: '#fff',
     margin: '0',
     letterSpacing: '4px',
-    textShadow: '2px 2px 20px rgba(255, 107, 53, 0.3)',
+    textTransform: 'uppercase',
   },
-  subtitle: { color: '#8892b0', fontSize: '18px', marginTop: '8px' },
+  subtitle: { color: '#a9a9a9', fontSize: '18px', marginTop: '8px' },
   summaryGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
@@ -236,96 +237,100 @@ const styles = {
   },
   summaryCard: {
     padding: '28px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
     textAlign: 'center',
   },
   summaryIcon: { marginBottom: '12px' },
   summaryLabel: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '16px',
-    color: '#8892b0',
+    color: '#a9a9a9',
     letterSpacing: '2px',
     marginBottom: '8px',
+    textTransform: 'uppercase',
   },
   summaryValue: { fontSize: '32px', fontWeight: '700' },
   tableCard: {
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
     overflow: 'hidden',
     marginBottom: '40px',
   },
   tableHeader: {
     padding: '24px 28px',
-    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+    borderBottom: '1px solid #464646',
   },
   tableTitle: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '24px',
     color: '#fff',
     letterSpacing: '3px',
+    textTransform: 'uppercase',
   },
   tableHeaderRow: {
     display: 'flex',
     padding: '16px 28px',
-    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-    background: 'rgba(255, 255, 255, 0.02)',
+    borderBottom: '1px solid #363636',
+    background: '#151515',
   },
   headerCell: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '14px',
-    color: '#8892b0',
+    color: '#a9a9a9',
     letterSpacing: '2px',
+    textTransform: 'uppercase',
   },
   paymentRow: {
     display: 'flex',
     padding: '20px 28px',
-    borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+    borderBottom: '1px solid #252525',
     alignItems: 'center',
   },
   cell: {
     display: 'flex',
     alignItems: 'center',
-    color: '#ccd6f6',
+    color: '#c4c4c4',
     fontSize: '14px',
   },
   descriptionText: { fontWeight: '500' },
-  paymentId: { color: '#8892b0', fontSize: '12px', marginTop: '4px' },
-  cardLast4: { color: '#8892b0', fontSize: '12px' },
+  paymentId: { color: '#a9a9a9', fontSize: '12px', marginTop: '4px' },
+  cardLast4: { color: '#a9a9a9', fontSize: '12px' },
   statusBadge: {
     display: 'inline-flex',
     alignItems: 'center',
     gap: '6px',
     padding: '6px 14px',
-    borderRadius: '20px',
+    borderRadius: '0',
     fontSize: '13px',
     fontWeight: '600',
   },
   downloadBtn: {
     background: 'none',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    color: '#8892b0',
+    border: '1px solid #464646',
+    color: '#a9a9a9',
     cursor: 'pointer',
     padding: '8px',
-    borderRadius: '8px',
+    borderRadius: '0',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
   infoCard: {
     padding: '32px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
   },
   infoTitle: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '24px',
     color: '#fff',
     letterSpacing: '3px',
     marginBottom: '24px',
+    textTransform: 'uppercase',
   },
   infoGrid: {
     display: 'grid',
@@ -334,13 +339,13 @@ const styles = {
   },
   infoItem: {},
   infoLabel: {
-    color: '#8892b0',
+    color: '#a9a9a9',
     fontSize: '13px',
     textTransform: 'uppercase',
     letterSpacing: '1px',
     marginBottom: '8px',
   },
-  infoValue: { color: '#ccd6f6', fontSize: '16px', fontWeight: '500' },
+  infoValue: { color: '#c4c4c4', fontSize: '16px', fontWeight: '500' },
 };
 
 export default ClientPaymentHistoryPage;
