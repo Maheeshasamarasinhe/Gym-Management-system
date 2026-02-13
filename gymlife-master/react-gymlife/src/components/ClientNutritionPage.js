@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Droplets, Flame, Wheat, Leaf, Edit3, X, Check } from 'lucide-react';
+import { Droplets, Flame, Wheat, Leaf } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useGymData } from '../context/GymDataContext';
 
@@ -11,57 +11,15 @@ const ClientNutritionPage = () => {
   // Load nutrition targets from context
   const memberNutrition = member?.nutrition || { protein: 0, carbs: 0, water: 0, fiber: 0 };
 
-  const [nutritionData, setNutritionData] = useState({
+  const nutritionData = {
     protein: { current: Math.round(memberNutrition.protein * 0.8), target: memberNutrition.protein, unit: 'g' },
     carbs: { current: Math.round(memberNutrition.carbs * 0.8), target: memberNutrition.carbs, unit: 'g' },
     water: { current: Math.round(memberNutrition.water * 0.83 * 10) / 10, target: memberNutrition.water, unit: 'L' },
     fiber: { current: Math.round(memberNutrition.fiber * 0.67), target: memberNutrition.fiber, unit: 'g' },
-  });
+  };
 
-  const [meals] = useState([
-    {
-      id: 1,
-      name: 'Breakfast',
-      time: '7:00 AM',
-      items: ['Oatmeal with berries', 'Scrambled eggs (3)', 'Whole wheat toast', 'Orange juice'],
-      calories: 650,
-    },
-    {
-      id: 2,
-      name: 'Mid-Morning Snack',
-      time: '10:00 AM',
-      items: ['Greek yogurt', 'Mixed nuts (30g)', 'Banana'],
-      calories: 350,
-    },
-    {
-      id: 3,
-      name: 'Lunch',
-      time: '1:00 PM',
-      items: ['Grilled chicken breast', 'Brown rice', 'Steamed broccoli', 'Mixed salad'],
-      calories: 750,
-    },
-    {
-      id: 4,
-      name: 'Pre-Workout Snack',
-      time: '4:00 PM',
-      items: ['Protein shake', 'Rice cakes with peanut butter'],
-      calories: 300,
-    },
-    {
-      id: 5,
-      name: 'Post-Workout',
-      time: '6:30 PM',
-      items: ['Whey protein shake', 'Banana'],
-      calories: 250,
-    },
-    {
-      id: 6,
-      name: 'Dinner',
-      time: '8:00 PM',
-      items: ['Salmon fillet', 'Sweet potato', 'Asparagus', 'Quinoa salad'],
-      calories: 700,
-    },
-  ]);
+  // Load meals from context (admin-managed, read-only for client)
+  const meals = member?.mealPlan || [];
 
   const [tips] = useState([
     'Drink 500ml water 30 min before each meal',
@@ -71,9 +29,6 @@ const ClientNutritionPage = () => {
     'Take multivitamin with breakfast',
   ]);
 
-  const [editingNutrient, setEditingNutrient] = useState(null);
-  const [editValue, setEditValue] = useState('');
-
   const nutrientIcons = {
     protein: <Flame size={24} />,
     carbs: <Wheat size={24} />,
@@ -82,26 +37,10 @@ const ClientNutritionPage = () => {
   };
 
   const nutrientColors = {
-    protein: '#FF6B35',
-    carbs: '#4ECDC4',
-    water: '#64B5F6',
-    fiber: '#81C784',
-  };
-
-  const handleEdit = (key) => {
-    setEditingNutrient(key);
-    setEditValue(nutritionData[key].current.toString());
-  };
-
-  const handleSave = (key) => {
-    const val = parseFloat(editValue);
-    if (!isNaN(val)) {
-      setNutritionData(prev => ({
-        ...prev,
-        [key]: { ...prev[key], current: val },
-      }));
-    }
-    setEditingNutrient(null);
+    protein: '#f36100',
+    carbs: '#f36100',
+    water: '#f36100',
+    fiber: '#f36100',
   };
 
   const totalCalories = meals.reduce((sum, m) => sum + m.calories, 0);
@@ -109,7 +48,7 @@ const ClientNutritionPage = () => {
   return (
     <div style={styles.container}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Muli:wght@300;400;600;700&display=swap');
 
         @keyframes slideIn {
           from { opacity: 0; transform: translateY(20px); }
@@ -122,7 +61,8 @@ const ClientNutritionPage = () => {
         }
 
         .nutrition-card:hover {
-          transform: translateY(-4px);
+          border-left: 4px solid #f36100;
+          background: #252525 !important;
         }
 
         .meal-card {
@@ -131,7 +71,8 @@ const ClientNutritionPage = () => {
         }
 
         .meal-card:hover {
-          transform: translateX(8px);
+          border-left: 4px solid #f36100;
+          background: #252525 !important;
         }
       `}</style>
 
@@ -155,36 +96,12 @@ const ClientNutritionPage = () => {
                   {nutrientIcons[key]}
                 </div>
                 <div style={styles.targetLabel}>{key.toUpperCase()}</div>
-                {editingNutrient !== key ? (
-                  <button onClick={() => handleEdit(key)} style={styles.editBtn}>
-                    <Edit3 size={14} />
-                  </button>
-                ) : (
-                  <div style={styles.editActions}>
-                    <button onClick={() => handleSave(key)} style={styles.saveBtn}>
-                      <Check size={14} />
-                    </button>
-                    <button onClick={() => setEditingNutrient(null)} style={styles.cancelBtn}>
-                      <X size={14} />
-                    </button>
-                  </div>
-                )}
               </div>
 
               <div style={styles.targetValues}>
-                {editingNutrient === key ? (
-                  <input
-                    type="number"
-                    value={editValue}
-                    onChange={(e) => setEditValue(e.target.value)}
-                    style={styles.editInput}
-                    autoFocus
-                  />
-                ) : (
-                  <span style={{ ...styles.currentValue, color: nutrientColors[key] }}>
-                    {data.current}
-                  </span>
-                )}
+                <span style={{ ...styles.currentValue, color: nutrientColors[key] }}>
+                  {data.current}
+                </span>
                 <span style={styles.targetValue}>
                   / {data.target}{data.unit}
                 </span>
@@ -213,31 +130,37 @@ const ClientNutritionPage = () => {
 
       {/* Meal Plan */}
       <div style={styles.sectionTitle}>MEAL PLAN</div>
-      <div style={styles.mealsList}>
-        {meals.map((meal, index) => (
-          <div
-            key={meal.id}
-            className="meal-card"
-            style={{ ...styles.mealCard, animationDelay: `${index * 0.1}s` }}
-          >
-            <div style={styles.mealHeader}>
-              <div>
-                <div style={styles.mealName}>{meal.name}</div>
-                <div style={styles.mealTime}>{meal.time}</div>
-              </div>
-              <div style={styles.mealCalories}>{meal.calories} kcal</div>
-            </div>
-            <div style={styles.mealItems}>
-              {meal.items.map((item, i) => (
-                <div key={i} style={styles.mealItem}>
-                  <div style={styles.mealDot} />
-                  {item}
+      {meals.length > 0 ? (
+        <div style={styles.mealsList}>
+          {meals.map((meal, index) => (
+            <div
+              key={meal.id}
+              className="meal-card"
+              style={{ ...styles.mealCard, animationDelay: `${index * 0.1}s` }}
+            >
+              <div style={styles.mealHeader}>
+                <div>
+                  <div style={styles.mealName}>{meal.name}</div>
+                  <div style={styles.mealTime}>{meal.time}</div>
                 </div>
-              ))}
+                <div style={styles.mealCalories}>{meal.calories} kcal</div>
+              </div>
+              <div style={styles.mealItems}>
+                {meal.items.map((item, i) => (
+                  <div key={i} style={styles.mealItem}>
+                    <div style={styles.mealDot} />
+                    {item}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div style={{ textAlign: 'center', padding: '48px', background: '#0a0a0a', border: '1px solid #464646', marginBottom: '48px' }}>
+          <p style={{ color: '#a9a9a9', fontSize: '16px', margin: 0 }}>No meal plan assigned yet. Your trainer will create one for you.</p>
+        </div>
+      )}
 
       {/* Nutrition Tips */}
       <div style={styles.sectionTitle}>NUTRITION TIPS</div>
@@ -256,18 +179,18 @@ const ClientNutritionPage = () => {
 const styles = {
   container: {
     padding: '40px',
-    fontFamily: "'Work Sans', sans-serif",
+    fontFamily: "'Muli', sans-serif",
   },
   header: { marginBottom: '48px' },
   title: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '56px',
     color: '#fff',
     margin: '0',
     letterSpacing: '4px',
-    textShadow: '2px 2px 20px rgba(255, 107, 53, 0.3)',
+    textTransform: 'uppercase',
   },
-  subtitle: { color: '#8892b0', fontSize: '18px', marginTop: '8px' },
+  subtitle: { color: '#a9a9a9', fontSize: '18px', marginTop: '8px' },
   targetsGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
@@ -276,9 +199,9 @@ const styles = {
   },
   targetCard: {
     padding: '28px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
   },
   targetHeader: {
     display: 'flex',
@@ -288,35 +211,12 @@ const styles = {
   },
   targetIcon: {},
   targetLabel: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '20px',
     color: '#fff',
     letterSpacing: '2px',
     flex: 1,
-  },
-  editBtn: {
-    background: 'none',
-    border: 'none',
-    color: '#8892b0',
-    cursor: 'pointer',
-    padding: '4px',
-  },
-  editActions: { display: 'flex', gap: '4px' },
-  saveBtn: {
-    background: 'rgba(78, 205, 196, 0.2)',
-    border: 'none',
-    color: '#4ECDC4',
-    cursor: 'pointer',
-    padding: '4px',
-    borderRadius: '4px',
-  },
-  cancelBtn: {
-    background: 'rgba(255, 107, 107, 0.2)',
-    border: 'none',
-    color: '#FF6B6B',
-    cursor: 'pointer',
-    padding: '4px',
-    borderRadius: '4px',
+    textTransform: 'uppercase',
   },
   targetValues: {
     display: 'flex',
@@ -328,60 +228,51 @@ const styles = {
     fontSize: '36px',
     fontWeight: '700',
   },
-  targetValue: { color: '#8892b0', fontSize: '16px' },
-  editInput: {
-    width: '80px',
-    padding: '8px 12px',
-    background: 'rgba(255, 255, 255, 0.1)',
-    border: '1px solid rgba(255, 255, 255, 0.3)',
-    borderRadius: '8px',
-    color: '#fff',
-    fontSize: '24px',
-    fontWeight: '700',
-    outline: 'none',
-  },
+  targetValue: { color: '#a9a9a9', fontSize: '16px' },
   progressBar: {
     width: '100%',
     height: '10px',
-    background: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: '5px',
+    background: '#252525',
+    borderRadius: '0',
     overflow: 'hidden',
     marginBottom: '8px',
   },
   progressFill: {
     height: '100%',
-    borderRadius: '5px',
+    borderRadius: '0',
     transition: 'width 0.5s ease',
   },
-  progressPercent: { color: '#8892b0', fontSize: '13px' },
+  progressPercent: { color: '#a9a9a9', fontSize: '13px' },
   calorieSummary: {
     padding: '32px',
-    background: 'linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(78, 205, 196, 0.1))',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
     textAlign: 'center',
     marginBottom: '48px',
   },
   calorieTitle: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '20px',
-    color: '#8892b0',
+    color: '#a9a9a9',
     letterSpacing: '3px',
     marginBottom: '8px',
+    textTransform: 'uppercase',
   },
   calorieValue: {
     fontSize: '64px',
     fontWeight: '700',
-    color: '#FF6B35',
+    color: '#f36100',
   },
-  calorieUnit: { fontSize: '24px', color: '#8892b0' },
+  calorieUnit: { fontSize: '24px', color: '#a9a9a9' },
   sectionTitle: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '32px',
     color: '#fff',
     letterSpacing: '3px',
     marginBottom: '24px',
     marginTop: '24px',
+    textTransform: 'uppercase',
   },
   mealsList: {
     display: 'flex',
@@ -391,9 +282,9 @@ const styles = {
   },
   mealCard: {
     padding: '28px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
   },
   mealHeader: {
     display: 'flex',
@@ -402,13 +293,14 @@ const styles = {
     marginBottom: '16px',
   },
   mealName: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '24px',
     color: '#fff',
     letterSpacing: '2px',
+    textTransform: 'uppercase',
   },
-  mealTime: { color: '#8892b0', fontSize: '14px', marginTop: '4px' },
-  mealCalories: { color: '#FF6B35', fontSize: '18px', fontWeight: '700' },
+  mealTime: { color: '#a9a9a9', fontSize: '14px', marginTop: '4px' },
+  mealCalories: { color: '#f36100', fontSize: '18px', fontWeight: '700' },
   mealItems: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -418,24 +310,24 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
-    color: '#ccd6f6',
+    color: '#c4c4c4',
     fontSize: '15px',
     padding: '8px 16px',
-    background: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: '8px',
+    background: '#252525',
+    borderRadius: '0',
   },
   mealDot: {
     width: '6px',
     height: '6px',
     borderRadius: '50%',
-    background: '#4ECDC4',
+    background: '#f36100',
     flexShrink: 0,
   },
   tipsCard: {
     padding: '32px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
     display: 'flex',
     flexDirection: 'column',
     gap: '20px',
@@ -448,9 +340,9 @@ const styles = {
   tipNumber: {
     width: '32px',
     height: '32px',
-    borderRadius: '50%',
-    background: 'rgba(255, 107, 53, 0.2)',
-    color: '#FF6B35',
+    borderRadius: '0',
+    background: '#252525',
+    color: '#f36100',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -458,7 +350,7 @@ const styles = {
     fontSize: '14px',
     flexShrink: 0,
   },
-  tipText: { color: '#ccd6f6', fontSize: '16px' },
+  tipText: { color: '#c4c4c4', fontSize: '16px' },
 };
 
 export default ClientNutritionPage;
