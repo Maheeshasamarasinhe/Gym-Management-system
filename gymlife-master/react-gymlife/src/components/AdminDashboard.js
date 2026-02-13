@@ -1,558 +1,626 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import { membersAPI, exercisesAPI, trainersAPI, attendanceAPI, paymentsAPI, nutritionAPI, scheduleAPI } from '../services/api';
+import React, { useState } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Calendar, DollarSign, Apple, Dumbbell, Users, Edit, Save, X } from 'lucide-react';
 
-const AdminDashboard = () => {
-  const { user, logout, isAdmin } = useAuth();
-  const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('users');
-  const [users, setUsers] = useState([]);
-  const [exercises, setExercises] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [stats, setStats] = useState({});
-  const [newExercise, setNewExercise] = useState({ name: '', steps: 0, rounds: 0, image_url: '', video_url: '' });
-  const [showAddExercise, setShowAddExercise] = useState(false);
-  const [scheduleData, setScheduleData] = useState({ sets: '', reps: '', notes: '' });
+const AdminMemberPage = () => {
+  const [activeSection, setActiveSection] = useState('about');
+  const [isEditing, setIsEditing] = useState(false);
 
-  // Load data from service
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
-    try {
-      const [usersRes, exercisesRes] = await Promise.all([
-        membersAPI.getAll(),
-        exercisesAPI.getAll(),
-      ]);
-      setUsers(usersRes.data);
-      setExercises(exercisesRes.data);
-    } catch (error) {
-      console.error('Error loading data:', error);
-    }
+  // Sample data
+  const memberData = {
+    id: 'M001',
+    name: 'John Mitchell',
+    email: 'john.mitchell@email.com',
+    phone: '+1 234 567 8900',
+    registeredDate: '2024-01-15',
+    plan: 'Premium',
+    status: 'active'
   };
 
-  if (!isAdmin) {
-    navigate('/login');
-    return null;
-  }
+  const weightData = [
+    { month: 'Jan', weight: 85 },
+    { month: 'Feb', weight: 83 },
+    { month: 'Mar', weight: 81 },
+    { month: 'Apr', weight: 80 },
+    { month: 'May', weight: 78 },
+    { month: 'Jun', weight: 77 },
+  ];
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
+  const chestData = [
+    { month: 'Jan', chest: 96 },
+    { month: 'Feb', chest: 97 },
+    { month: 'Mar', chest: 98 },
+    { month: 'Apr', chest: 99 },
+    { month: 'May', chest: 101 },
+    { month: 'Jun', chest: 102 },
+  ];
 
-  const markAttendance = async (userId) => {
-    try {
-      await attendanceAPI.create({ member_id: userId, attend_date: new Date().toISOString().split('T')[0] });
-      loadData();
-    } catch (error) {
-      console.error('Error marking attendance:', error);
-    }
-  };
+  const [paymentHistory, setPaymentHistory] = useState([
+    { id: 1, date: '2024-06-01', month: 'June 2024', amount: 99, status: 'paid' },
+    { id: 2, date: '2024-05-01', month: 'May 2024', amount: 99, status: 'paid' },
+    { id: 3, date: '2024-04-01', month: 'April 2024', amount: 99, status: 'paid' },
+    { id: 4, date: '2024-03-01', month: 'March 2024', amount: 99, status: 'pending' },
+  ]);
 
-  const updatePaymentStatus = async (userId, status) => {
-    try {
-      await paymentsAPI.create({ member_id: userId, payment_date: new Date().toISOString().split('T')[0], payment_month: new Date().toLocaleString('default', { month: 'long', year: 'numeric' }), status: status });
-      loadData();
-    } catch (error) {
-      console.error('Error updating payment:', error);
-    }
-  };
+  const [schedule, setSchedule] = useState([
+    {
+      id: 1,
+      name: 'Bench Press',
+      steps: 4,
+      rounds: 3,
+      image: 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=400',
+      video: 'https://youtube.com/watch?v=bench-press'
+    },
+    {
+      id: 2,
+      name: 'Squats',
+      steps: 5,
+      rounds: 4,
+      image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=400',
+      video: 'https://youtube.com/watch?v=squats'
+    },
+  ]);
 
-  const addExerciseToUser = async (userId, exerciseId) => {
-    try {
-      await scheduleAPI.create({
-        member_id: userId,
-        exercise_name: exercises.find(e => e.id === exerciseId)?.name || '',
-        steps: parseInt(scheduleData.sets) || 0,
-        rounds: parseInt(scheduleData.notes) || 0
-      });
-      setScheduleData({ sets: '', notes: '' });
-      loadData();
-      if (selectedUser && selectedUser.id === userId) {
-        const userRes = await membersAPI.getById(userId);
-        setSelectedUser(userRes.data);
-      }
-    } catch (error) {
-      console.error('Error adding exercise:', error);
-    }
-  };
+  const [nutrition, setNutrition] = useState({
+    protein: 150,
+    carbs: 200,
+    water: 3.5,
+    fiber: 30
+  });
 
-  const removeExerciseFromUser = async (userId, exerciseId) => {
-    try {
-      await scheduleAPI.remove(exerciseId);
-      loadData();
-      if (selectedUser && selectedUser.id === userId) {
-        const userRes = await membersAPI.getById(userId);
-        setSelectedUser(userRes.data);
-      }
-    } catch (error) {
-      console.error('Error removing exercise:', error);
-    }
-  };
+  const [attendance, setAttendance] = useState([
+    { month: 'June', days: 24, total: 30 },
+    { month: 'May', days: 28, total: 31 },
+    { month: 'April', days: 25, total: 30 },
+  ]);
 
-  const updateNutritionPlan = async (userId, plan) => {
-    try {
-      await nutritionAPI.create({ member_id: userId, ...plan });
-      loadData();
-      if (selectedUser && selectedUser.id === userId) {
-        const userRes = await membersAPI.getById(userId);
-        setSelectedUser(userRes.data);
-      }
-    } catch (error) {
-      console.error('Error updating nutrition plan:', error);
-    }
-  };
+  const renderAboutSection = () => (
+    <div style={styles.sectionContent}>
+      <div style={styles.infoGrid}>
+        <div style={styles.infoCard}>
+          <div style={styles.infoLabel}>Full Name</div>
+          <div style={styles.infoValue}>{memberData.name}</div>
+        </div>
+        <div style={styles.infoCard}>
+          <div style={styles.infoLabel}>Member ID</div>
+          <div style={styles.infoValue}>{memberData.id}</div>
+        </div>
+        <div style={styles.infoCard}>
+          <div style={styles.infoLabel}>Registration Date</div>
+          <div style={styles.infoValue}>{memberData.registeredDate}</div>
+        </div>
+        <div style={styles.infoCard}>
+          <div style={styles.infoLabel}>Membership Plan</div>
+          <div style={styles.infoValue}>{memberData.plan}</div>
+        </div>
+      </div>
 
-  const addNewExercise = async () => {
-    try {
-      if (newExercise.name) {
-        await exercisesAPI.create(newExercise);
-        setNewExercise({ name: '', steps: 0, rounds: 0, image_url: '', video_url: '' });
-        setShowAddExercise(false);
-        loadData();
-      }
-    } catch (error) {
-      console.error('Error adding exercise:', error);
-    }
-  };
+      <div style={styles.chartsContainer}>
+        <div style={styles.chartCard}>
+          <h3 style={styles.chartTitle}>WEIGHT PROGRESS (KG)</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={weightData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <XAxis dataKey="month" stroke="#8892b0" />
+              <YAxis stroke="#8892b0" />
+              <Tooltip 
+                contentStyle={{ background: '#1a1f3a', border: '1px solid rgba(255,255,255,0.1)' }}
+                labelStyle={{ color: '#fff' }}
+              />
+              <Line type="monotone" dataKey="weight" stroke="#FF6B35" strokeWidth={3} dot={{ fill: '#FF6B35', r: 6 }} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div style={styles.chartCard}>
+          <h3 style={styles.chartTitle}>CHEST SIZE (CM)</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={chestData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <XAxis dataKey="month" stroke="#8892b0" />
+              <YAxis stroke="#8892b0" />
+              <Tooltip 
+                contentStyle={{ background: '#1a1f3a', border: '1px solid rgba(255,255,255,0.1)' }}
+                labelStyle={{ color: '#fff' }}
+              />
+              <Line type="monotone" dataKey="chest" stroke="#4ECDC4" strokeWidth={3} dot={{ fill: '#4ECDC4', r: 6 }} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderPaymentSection = () => (
+    <div style={styles.sectionContent}>
+      <h3 style={styles.sectionTitle}>Payment History</h3>
+      <div style={styles.paymentList}>
+        {paymentHistory.map(payment => (
+          <div key={payment.id} style={styles.paymentCard}>
+            <div>
+              <div style={styles.paymentMonth}>{payment.month}</div>
+              <div style={styles.paymentDate}>Paid on: {payment.date}</div>
+            </div>
+            <div style={styles.paymentRight}>
+              <div style={styles.paymentAmount}>${payment.amount}</div>
+              <span style={{
+                ...styles.paymentStatus,
+                ...(payment.status === 'paid' ? styles.paidStatus : styles.pendingStatus)
+              }}>
+                {payment.status.toUpperCase()}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const renderScheduleSection = () => (
+    <div style={styles.sectionContent}>
+      <div style={styles.sectionHeader}>
+        <h3 style={styles.sectionTitle}>Exercise Schedule</h3>
+        <button style={styles.addButton}>+ Add Exercise</button>
+      </div>
+      
+      <div style={styles.exerciseGrid}>
+        {schedule.map(exercise => (
+          <div key={exercise.id} style={styles.exerciseCard}>
+            <img src={exercise.image} alt={exercise.name} style={styles.exerciseImage} />
+            <div style={styles.exerciseContent}>
+              <h4 style={styles.exerciseName}>{exercise.name}</h4>
+              <div style={styles.exerciseDetails}>
+                <span style={styles.exerciseDetail}>{exercise.steps} Steps</span>
+                <span style={styles.exerciseDetail}>{exercise.rounds} Rounds</span>
+              </div>
+              <a href={exercise.video} style={styles.videoLink} target="_blank" rel="noopener noreferrer">
+                Watch Video →
+              </a>
+              <div style={styles.exerciseActions}>
+                <button style={styles.iconButton}><Edit size={16} /></button>
+                <button style={{ ...styles.iconButton, ...styles.deleteIconButton }}><X size={16} /></button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const renderNutritionSection = () => (
+    <div style={styles.sectionContent}>
+      <div style={styles.sectionHeader}>
+        <h3 style={styles.sectionTitle}>Nutrition Plan</h3>
+        <button style={styles.addButton} onClick={() => setIsEditing(!isEditing)}>
+          {isEditing ? 'Save Changes' : 'Edit Plan'}
+        </button>
+      </div>
+
+      <div style={styles.nutritionGrid}>
+        <div style={styles.nutritionCard}>
+          <div style={styles.nutritionIcon}>🥩</div>
+          <div style={styles.nutritionLabel}>Protein</div>
+          <div style={styles.nutritionValue}>{nutrition.protein}g</div>
+          <div style={styles.nutritionSubtext}>per day</div>
+        </div>
+        <div style={styles.nutritionCard}>
+          <div style={styles.nutritionIcon}>🍞</div>
+          <div style={styles.nutritionLabel}>Carbs</div>
+          <div style={styles.nutritionValue}>{nutrition.carbs}g</div>
+          <div style={styles.nutritionSubtext}>per day</div>
+        </div>
+        <div style={styles.nutritionCard}>
+          <div style={styles.nutritionIcon}>💧</div>
+          <div style={styles.nutritionLabel}>Water</div>
+          <div style={styles.nutritionValue}>{nutrition.water}L</div>
+          <div style={styles.nutritionSubtext}>per day</div>
+        </div>
+        <div style={styles.nutritionCard}>
+          <div style={styles.nutritionIcon}>🌾</div>
+          <div style={styles.nutritionLabel}>Fiber</div>
+          <div style={styles.nutritionValue}>{nutrition.fiber}g</div>
+          <div style={styles.nutritionSubtext}>per day</div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderAttendanceSection = () => (
+    <div style={styles.sectionContent}>
+      <h3 style={styles.sectionTitle}>Attendance Record</h3>
+      <div style={styles.attendanceList}>
+        {attendance.map((record, index) => (
+          <div key={index} style={styles.attendanceCard}>
+            <div style={styles.attendanceMonth}>{record.month}</div>
+            <div style={styles.attendanceBar}>
+              <div style={{
+                ...styles.attendanceProgress,
+                width: `${(record.days / record.total) * 100}%`
+              }} />
+            </div>
+            <div style={styles.attendanceDays}>{record.days} / {record.total} days</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const sections = [
+    { id: 'about', label: 'About', icon: Users },
+    { id: 'payment', label: 'Payment History', icon: DollarSign },
+    { id: 'schedule', label: 'Schedule', icon: Dumbbell },
+    { id: 'nutrition', label: 'Nutrition Plan', icon: Apple },
+    { id: 'attendance', label: 'Attendance', icon: Calendar },
+  ];
 
   return (
-    <div style={{ background: '#151515', minHeight: '100vh', paddingTop: '100px' }}>
-      <div className="container">
-        <div className="row">
-          <div className="col-12">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
-              <h2 style={{ color: '#ffffff' }}>Admin Dashboard</h2>
-              <div>
-                <span style={{ color: '#c4c4c4', marginRight: '20px' }}>Welcome, {user?.name}</span>
-                <button onClick={handleLogout} className="primary-btn">Logout</button>
-              </div>
-            </div>
+    <div style={styles.container}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@300;400;600;700&display=swap');
+        
+        .sidebar-item {
+          transition: all 0.3s ease;
+        }
+        
+        .sidebar-item:hover {
+          transform: translateX(8px);
+          background: rgba(255, 107, 53, 0.1);
+        }
+        
+        .sidebar-item.active {
+          background: rgba(255, 107, 53, 0.2);
+          border-left: 4px solid #FF6B35;
+        }
+      `}</style>
 
-            {/* Statistics Cards */}
-            <div className="row" style={{ marginBottom: '30px' }}>
-              <div className="col-lg-2 col-md-4 col-sm-6">
-                <div style={{ background: '#902828ff', padding: '20px', border: '1px solid #363636', textAlign: 'center' }}>
-                  <h3 style={{ color: '#f36100', margin: '0' }}>{stats.totalUsers}</h3>
-                  <p style={{ color: '#c4c4c4', margin: '5px 0 0 0' }}>Total Users</p>
-                </div>
-              </div>
-              <div className="col-lg-2 col-md-4 col-sm-6">
-                <div style={{ background: '#0a0a0a', padding: '20px', border: '1px solid #363636', textAlign: 'center' }}>
-                  <h3 style={{ color: '#4CAF50', margin: '0' }}>{stats.activeUsers}</h3>
-                  <p style={{ color: '#c4c4c4', margin: '5px 0 0 0' }}>Active Members</p>
-                </div>
-              </div>
-              <div className="col-lg-2 col-md-4 col-sm-6">
-                <div style={{ background: '#0a0a0a', padding: '20px', border: '1px solid #363636', textAlign: 'center' }}>
-                  <h3 style={{ color: '#4CAF50', margin: '0' }}>{stats.paidUsers}</h3>
-                  <p style={{ color: '#c4c4c4', margin: '5px 0 0 0' }}>Paid Users</p>
-                </div>
-              </div>
-              <div className="col-lg-2 col-md-4 col-sm-6">
-                <div style={{ background: '#0a0a0a', padding: '20px', border: '1px solid #363636', textAlign: 'center' }}>
-                  <h3 style={{ color: '#f36100', margin: '0' }}>{stats.pendingPayments}</h3>
-                  <p style={{ color: '#c4c4c4', margin: '5px 0 0 0' }}>Pending Payments</p>
-                </div>
-              </div>
-              <div className="col-lg-2 col-md-4 col-sm-6">
-                <div style={{ background: '#0a0a0a', padding: '20px', border: '1px solid #363636', textAlign: 'center' }}>
-                  <h3 style={{ color: '#f36100', margin: '0' }}>{stats.totalExercises}</h3>
-                  <p style={{ color: '#c4c4c4', margin: '5px 0 0 0' }}>Total Exercises</p>
-                </div>
-              </div>
-              <div className="col-lg-2 col-md-4 col-sm-6">
-                <div style={{ background: '#0a0a0a', padding: '20px', border: '1px solid #363636', textAlign: 'center' }}>
-                  <h3 style={{ color: '#4CAF50', margin: '0' }}>{stats.todayAttendance}</h3>
-                  <p style={{ color: '#c4c4c4', margin: '5px 0 0 0' }}>Today's Attendance</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Navigation Tabs */}
-            <div style={{ marginBottom: '30px' }}>
-              <button 
-                onClick={() => setActiveTab('users')}
-                className={`primary-btn ${activeTab === 'users' ? '' : 'btn-normal'}`}
-                style={{ marginRight: '10px', background: activeTab === 'users' ? '#f36100' : '#363636' }}
-              >
-                User Management
-              </button>
-              <button 
-                onClick={() => setActiveTab('exercises')}
-                className={`primary-btn ${activeTab === 'exercises' ? '' : 'btn-normal'}`}
-                style={{ marginRight: '10px', background: activeTab === 'exercises' ? '#f36100' : '#363636' }}
-              >
-                Exercise Library
-              </button>
-              <button 
-                onClick={() => setActiveTab('attendance')}
-                className={`primary-btn ${activeTab === 'attendance' ? '' : 'btn-normal'}`}
-                style={{ background: activeTab === 'attendance' ? '#f36100' : '#363636' }}
-              >
-                Attendance
-              </button>
-            </div>
-
-            {/* User Management Tab */}
-            {activeTab === 'users' && (
-              <div>
-                <h3 style={{ color: '#ffffff', marginBottom: '20px' }}>User Management</h3>
-                <div className="row">
-                  {users.map(user => (
-                    <div key={user.id} className="col-lg-6 col-md-12" style={{ marginBottom: '20px' }}>
-                      <div style={{ background: '#0a0a0a', padding: '20px', border: '1px solid #363636' }}>
-                        <h5 style={{ color: '#ffffff' }}>{user.name}</h5>
-                        <p style={{ color: '#c4c4c4', margin: '5px 0' }}>Email: {user.email}</p>
-                        <p style={{ color: '#c4c4c4', margin: '5px 0' }}>Phone: {user.phone}</p>
-                        <p style={{ color: '#c4c4c4', margin: '5px 0' }}>
-                          Payment Status: 
-                          <span style={{ color: user.paymentStatus === 'Paid' ? '#4CAF50' : '#f36100', marginLeft: '5px' }}>
-                            {user.paymentStatus}
-                          </span>
-                        </p>
-                        <p style={{ color: '#c4c4c4', margin: '5px 0' }}>Weight: {user.weight} | Height: {user.height}</p>
-                        <p style={{ color: '#c4c4c4', margin: '5px 0' }}>Fitness Level: {user.fitnessLevel}</p>
-                        <p style={{ color: '#c4c4c4', margin: '5px 0' }}>Attendance: {(user.attendance || []).length} days</p>
-                        <p style={{ color: '#c4c4c4', margin: '5px 0' }}>Exercises: {(user.schedule || []).length}</p>
-                        
-                        <div style={{ marginTop: '15px' }}>
-                          <button 
-                            onClick={() => setSelectedUser(user)}
-                            className="primary-btn"
-                            style={{ marginRight: '10px', fontSize: '12px', padding: '8px 15px' }}
-                          >
-                            Manage Schedule
-                          </button>
-                          <button 
-                            onClick={() => updatePaymentStatus(user.id, user.paymentStatus === 'Paid' ? 'Pending' : 'Paid')}
-                            className="primary-btn btn-normal"
-                            style={{ fontSize: '12px', padding: '8px 15px', background: '#363636' }}
-                          >
-                            Toggle Payment
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Exercise Library Tab */}
-            {activeTab === 'exercises' && (
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                  <h3 style={{ color: '#ffffff' }}>Exercise Library</h3>
-                  <button 
-                    onClick={() => setShowAddExercise(true)}
-                    className="primary-btn"
-                  >
-                    Add New Exercise
-                  </button>
-                </div>
-                <div className="row">
-                  {exercises.map(exercise => (
-                    <div key={exercise.id} className="col-lg-4 col-md-6" style={{ marginBottom: '20px' }}>
-                      <div style={{ background: '#0a0a0a', padding: '20px', border: '1px solid #363636' }}>
-                        <h5 style={{ color: '#ffffff' }}>{exercise.name}</h5>
-                        <p style={{ color: '#c4c4c4', margin: '5px 0' }}>Category: {exercise.category}</p>
-                        <p style={{ color: '#c4c4c4', margin: '5px 0' }}>Difficulty: {exercise.difficulty}</p>
-                        <p style={{ color: '#c4c4c4', margin: '5px 0' }}>{exercise.description}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Attendance Tab */}
-            {activeTab === 'attendance' && (
-              <div>
-                <h3 style={{ color: '#ffffff', marginBottom: '20px' }}>Attendance Management</h3>
-                <div className="row">
-                  {users.map(user => (
-                    <div key={user.id} className="col-lg-6 col-md-12" style={{ marginBottom: '20px' }}>
-                      <div style={{ background: '#0a0a0a', padding: '20px', border: '1px solid #363636' }}>
-                        <h5 style={{ color: '#ffffff' }}>{user.name}</h5>
-                        <p style={{ color: '#c4c4c4', margin: '5px 0' }}>
-                          Attendance Days: {(user.attendance || []).length}
-                        </p>
-                        <button 
-                          onClick={() => markAttendance(user.id)}
-                          className="primary-btn"
-                          style={{ fontSize: '12px', padding: '8px 15px' }}
-                        >
-                          Mark Today's Attendance
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* User Schedule Management Modal */}
-            {selectedUser && (
-              <div style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                background: 'rgba(0,0,0,0.8)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                zIndex: 1000
-              }}>
-                <div style={{
-                  background: '#151515',
-                  padding: '30px',
-                  border: '1px solid #363636',
-                  maxWidth: '600px',
-                  width: '90%',
-                  maxHeight: '80vh',
-                  overflowY: 'auto'
-                }}>
-                  <h4 style={{ color: '#ffffff', marginBottom: '20px' }}>
-                    Manage Schedule for {selectedUser.name}
-                  </h4>
-                  
-                  <div style={{ marginBottom: '20px' }}>
-                    <h5 style={{ color: '#ffffff' }}>Add Exercise:</h5>
-                    <select 
-                      onChange={(e) => {
-                        if (e.target.value) {
-                          addExerciseToUser(selectedUser.id, parseInt(e.target.value));
-                          e.target.value = '';
-                        }
-                      }}
-                      style={{
-                        width: '100%',
-                        height: '40px',
-                        background: 'transparent',
-                        border: '1px solid #363636',
-                        color: '#c4c4c4',
-                        paddingLeft: '10px',
-                        marginBottom: '10px'
-                      }}
-                    >
-                      <option value="">Select Exercise</option>
-                      {exercises.map(exercise => (
-                        <option key={exercise.id} value={exercise.id} style={{ background: '#151515' }}>
-                          {exercise.name} - {exercise.category}
-                        </option>
-                      ))}
-                    </select>
-                    
-                    <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-                      <input
-                        type="text"
-                        placeholder="Sets (e.g., 3x12)"
-                        value={scheduleData.sets}
-                        onChange={(e) => setScheduleData({...scheduleData, sets: e.target.value})}
-                        style={{
-                          flex: 1,
-                          height: '35px',
-                          background: 'transparent',
-                          border: '1px solid #363636',
-                          color: '#c4c4c4',
-                          paddingLeft: '10px'
-                        }}
-                      />
-                      <input
-                        type="text"
-                        placeholder="Notes"
-                        value={scheduleData.notes}
-                        onChange={(e) => setScheduleData({...scheduleData, notes: e.target.value})}
-                        style={{
-                          flex: 2,
-                          height: '35px',
-                          background: 'transparent',
-                          border: '1px solid #363636',
-                          color: '#c4c4c4',
-                          paddingLeft: '10px'
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  <div style={{ marginBottom: '20px' }}>
-                    <h5 style={{ color: '#ffffff' }}>Current Schedule:</h5>
-                    {(selectedUser.schedule || []).map(exercise => (
-                      <div key={exercise.id} style={{ 
-                        display: 'flex', 
-                        justifyContent: 'space-between', 
-                        alignItems: 'center',
-                        color: '#c4c4c4', 
-                        padding: '8px 0',
-                        borderBottom: '1px solid #363636'
-                      }}>
-                        <div>
-                          <strong>{exercise.name}</strong> ({exercise.category})
-                          {exercise.sets && <div style={{ fontSize: '12px' }}>Sets: {exercise.sets}</div>}
-                          {exercise.notes && <div style={{ fontSize: '12px' }}>Notes: {exercise.notes}</div>}
-                        </div>
-                        <button 
-                          onClick={() => removeExerciseFromUser(selectedUser.id, exercise.id)}
-                          style={{ 
-                            background: 'transparent', 
-                            border: 'none', 
-                            color: '#f36100', 
-                            cursor: 'pointer',
-                            fontSize: '16px'
-                          }}
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    ))}
-                    {(!selectedUser.schedule || selectedUser.schedule.length === 0) && (
-                      <p style={{ color: '#c4c4c4', fontStyle: 'italic' }}>No exercises assigned yet</p>
-                    )}
-                  </div>
-
-                  <div style={{ marginBottom: '20px' }}>
-                    <h5 style={{ color: '#ffffff' }}>Nutrition Plan:</h5>
-                    <textarea
-                      value={selectedUser.nutritionPlan}
-                      onChange={(e) => updateNutritionPlan(selectedUser.id, e.target.value)}
-                      placeholder="Enter nutrition advice and plan..."
-                      style={{
-                        width: '100%',
-                        height: '100px',
-                        background: 'transparent',
-                        border: '1px solid #363636',
-                        color: '#c4c4c4',
-                        padding: '10px',
-                        resize: 'vertical'
-                      }}
-                    />
-                  </div>
-
-                  <button 
-                    onClick={() => setSelectedUser(null)}
-                    className="primary-btn"
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Add Exercise Modal */}
-            {showAddExercise && (
-              <div style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                background: 'rgba(0,0,0,0.8)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                zIndex: 1000
-              }}>
-                <div style={{
-                  background: '#151515',
-                  padding: '30px',
-                  border: '1px solid #363636',
-                  maxWidth: '500px',
-                  width: '90%'
-                }}>
-                  <h4 style={{ color: '#ffffff', marginBottom: '20px' }}>Add New Exercise</h4>
-                  
-                  <input
-                    type="text"
-                    placeholder="Exercise Name"
-                    value={newExercise.name}
-                    onChange={(e) => setNewExercise({...newExercise, name: e.target.value})}
-                    style={{
-                      width: '100%',
-                      height: '40px',
-                      background: 'transparent',
-                      border: '1px solid #363636',
-                      color: '#c4c4c4',
-                      paddingLeft: '10px',
-                      marginBottom: '15px'
-                    }}
-                  />
-
-                  <input
-                    type="text"
-                    placeholder="Category (e.g., Chest, Legs, Back)"
-                    value={newExercise.category}
-                    onChange={(e) => setNewExercise({...newExercise, category: e.target.value})}
-                    style={{
-                      width: '100%',
-                      height: '40px',
-                      background: 'transparent',
-                      border: '1px solid #363636',
-                      color: '#c4c4c4',
-                      paddingLeft: '10px',
-                      marginBottom: '15px'
-                    }}
-                  />
-
-                  <select
-                    value={newExercise.difficulty}
-                    onChange={(e) => setNewExercise({...newExercise, difficulty: e.target.value})}
-                    style={{
-                      width: '100%',
-                      height: '40px',
-                      background: 'transparent',
-                      border: '1px solid #363636',
-                      color: '#c4c4c4',
-                      paddingLeft: '10px',
-                      marginBottom: '15px'
-                    }}
-                  >
-                    <option value="Beginner" style={{ background: '#151515' }}>Beginner</option>
-                    <option value="Intermediate" style={{ background: '#151515' }}>Intermediate</option>
-                    <option value="Advanced" style={{ background: '#151515' }}>Advanced</option>
-                  </select>
-
-                  <textarea
-                    placeholder="Description"
-                    value={newExercise.description}
-                    onChange={(e) => setNewExercise({...newExercise, description: e.target.value})}
-                    style={{
-                      width: '100%',
-                      height: '80px',
-                      background: 'transparent',
-                      border: '1px solid #363636',
-                      color: '#c4c4c4',
-                      padding: '10px',
-                      marginBottom: '20px',
-                      resize: 'vertical'
-                    }}
-                  />
-
-                  <div>
-                    <button onClick={addNewExercise} className="primary-btn" style={{ marginRight: '10px' }}>
-                      Add Exercise
-                    </button>
-                    <button 
-                      onClick={() => setShowAddExercise(false)}
-                      className="primary-btn btn-normal"
-                      style={{ background: '#363636' }}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
+      <div style={styles.sidebar}>
+        <div style={styles.memberHeader}>
+          <div style={styles.memberAvatar}>JM</div>
+          <div>
+            <div style={styles.memberHeaderName}>{memberData.name}</div>
+            <div style={styles.memberHeaderId}>{memberData.id}</div>
           </div>
         </div>
+
+        <div style={styles.sidebarMenu}>
+          {sections.map(section => {
+            const Icon = section.icon;
+            return (
+              <div
+                key={section.id}
+                className={`sidebar-item ${activeSection === section.id ? 'active' : ''}`}
+                style={styles.sidebarItem}
+                onClick={() => setActiveSection(section.id)}
+              >
+                <Icon size={20} />
+                <span>{section.label}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div style={styles.mainContent}>
+        {activeSection === 'about' && renderAboutSection()}
+        {activeSection === 'payment' && renderPaymentSection()}
+        {activeSection === 'schedule' && renderScheduleSection()}
+        {activeSection === 'nutrition' && renderNutritionSection()}
+        {activeSection === 'attendance' && renderAttendanceSection()}
       </div>
     </div>
   );
 };
 
-export default AdminDashboard;
+const styles = {
+  container: {
+    display: 'flex',
+    minHeight: '100vh',
+    background: 'linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%)',
+    fontFamily: "'Work Sans', sans-serif",
+  },
+  sidebar: {
+    width: '320px',
+    background: 'rgba(255, 255, 255, 0.03)',
+    borderRight: '1px solid rgba(255, 255, 255, 0.1)',
+    padding: '40px 0',
+  },
+  memberHeader: {
+    display: 'flex',
+    gap: '16px',
+    padding: '0 32px 32px 32px',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+    marginBottom: '32px',
+  },
+  memberAvatar: {
+    width: '60px',
+    height: '60px',
+    borderRadius: '12px',
+    background: 'linear-gradient(135deg, #FF6B35, #F7931E)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '24px',
+    fontWeight: '700',
+    color: '#fff',
+  },
+  memberHeaderName: {
+    fontSize: '20px',
+    fontWeight: '600',
+    color: '#fff',
+    marginBottom: '4px',
+  },
+  memberHeaderId: {
+    fontSize: '14px',
+    color: '#8892b0',
+  },
+  sidebarMenu: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
+  },
+  sidebarItem: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '16px',
+    padding: '16px 32px',
+    color: '#fff',
+    cursor: 'pointer',
+    fontSize: '16px',
+  },
+  mainContent: {
+    flex: 1,
+    padding: '40px',
+    overflowY: 'auto',
+  },
+  sectionContent: {
+    animation: 'fadeIn 0.4s ease-out',
+  },
+  sectionHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '32px',
+  },
+  sectionTitle: {
+    fontFamily: "'Bebas Neue', sans-serif",
+    fontSize: '36px',
+    color: '#fff',
+    letterSpacing: '2px',
+    margin: '0 0 32px 0',
+  },
+  addButton: {
+    background: 'rgba(78, 205, 196, 0.2)',
+    border: '1px solid #4ECDC4',
+    color: '#4ECDC4',
+    padding: '12px 24px',
+    borderRadius: '8px',
+    fontSize: '14px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+  },
+  infoGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    gap: '24px',
+    marginBottom: '48px',
+  },
+  infoCard: {
+    background: 'rgba(255, 255, 255, 0.03)',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    borderRadius: '12px',
+    padding: '24px',
+  },
+  infoLabel: {
+    fontSize: '12px',
+    color: '#8892b0',
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+    marginBottom: '8px',
+  },
+  infoValue: {
+    fontSize: '20px',
+    color: '#fff',
+    fontWeight: '600',
+  },
+  chartsContainer: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    gap: '32px',
+  },
+  chartCard: {
+    background: 'rgba(255, 255, 255, 0.03)',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    borderRadius: '12px',
+    padding: '32px',
+  },
+  chartTitle: {
+    fontFamily: "'Bebas Neue', sans-serif",
+    fontSize: '20px',
+    color: '#fff',
+    letterSpacing: '2px',
+    marginBottom: '24px',
+  },
+  paymentList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+  },
+  paymentCard: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    background: 'rgba(255, 255, 255, 0.03)',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    borderRadius: '12px',
+    padding: '24px',
+  },
+  paymentMonth: {
+    fontSize: '18px',
+    fontWeight: '600',
+    color: '#fff',
+    marginBottom: '4px',
+  },
+  paymentDate: {
+    fontSize: '14px',
+    color: '#8892b0',
+  },
+  paymentRight: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '24px',
+  },
+  paymentAmount: {
+    fontSize: '24px',
+    fontWeight: '700',
+    color: '#4ECDC4',
+  },
+  paymentStatus: {
+    padding: '8px 16px',
+    borderRadius: '8px',
+    fontSize: '12px',
+    fontWeight: '700',
+    letterSpacing: '1px',
+  },
+  paidStatus: {
+    background: 'rgba(78, 205, 196, 0.2)',
+    color: '#4ECDC4',
+  },
+  pendingStatus: {
+    background: 'rgba(255, 193, 7, 0.2)',
+    color: '#FFC107',
+  },
+  exerciseGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    gap: '24px',
+  },
+  exerciseCard: {
+    background: 'rgba(255, 255, 255, 0.03)',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    borderRadius: '12px',
+    overflow: 'hidden',
+  },
+  exerciseImage: {
+    width: '100%',
+    height: '200px',
+    objectFit: 'cover',
+  },
+  exerciseContent: {
+    padding: '20px',
+  },
+  exerciseName: {
+    fontSize: '20px',
+    fontWeight: '600',
+    color: '#fff',
+    marginBottom: '12px',
+  },
+  exerciseDetails: {
+    display: 'flex',
+    gap: '12px',
+    marginBottom: '16px',
+  },
+  exerciseDetail: {
+    padding: '6px 12px',
+    background: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: '6px',
+    fontSize: '13px',
+    color: '#8892b0',
+  },
+  videoLink: {
+    color: '#FF6B35',
+    fontSize: '14px',
+    fontWeight: '600',
+    textDecoration: 'none',
+    display: 'block',
+    marginBottom: '16px',
+  },
+  exerciseActions: {
+    display: 'flex',
+    gap: '8px',
+  },
+  iconButton: {
+    background: 'rgba(78, 205, 196, 0.1)',
+    border: '1px solid rgba(78, 205, 196, 0.3)',
+    color: '#4ECDC4',
+    padding: '8px 12px',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  deleteIconButton: {
+    background: 'rgba(255, 107, 107, 0.1)',
+    border: '1px solid rgba(255, 107, 107, 0.3)',
+    color: '#FF6B6B',
+  },
+  nutritionGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4, 1fr)',
+    gap: '24px',
+  },
+  nutritionCard: {
+    background: 'rgba(255, 255, 255, 0.03)',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    borderRadius: '12px',
+    padding: '32px',
+    textAlign: 'center',
+  },
+  nutritionIcon: {
+    fontSize: '48px',
+    marginBottom: '16px',
+  },
+  nutritionLabel: {
+    fontSize: '14px',
+    color: '#8892b0',
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+    marginBottom: '8px',
+  },
+  nutritionValue: {
+    fontSize: '36px',
+    fontWeight: '700',
+    color: '#fff',
+    marginBottom: '4px',
+  },
+  nutritionSubtext: {
+    fontSize: '12px',
+    color: '#8892b0',
+  },
+  attendanceList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+  },
+  attendanceCard: {
+    background: 'rgba(255, 255, 255, 0.03)',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    borderRadius: '12px',
+    padding: '24px',
+  },
+  attendanceMonth: {
+    fontSize: '18px',
+    fontWeight: '600',
+    color: '#fff',
+    marginBottom: '12px',
+  },
+  attendanceBar: {
+    width: '100%',
+    height: '12px',
+    background: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: '6px',
+    overflow: 'hidden',
+    marginBottom: '8px',
+  },
+  attendanceProgress: {
+    height: '100%',
+    background: 'linear-gradient(90deg, #FF6B35, #4ECDC4)',
+    transition: 'width 0.3s ease',
+  },
+  attendanceDays: {
+    fontSize: '14px',
+    color: '#8892b0',
+  },
+};
+
+export default AdminMemberPage;

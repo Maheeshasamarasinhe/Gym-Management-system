@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useGymData } from '../context/GymDataContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { authAPI } from '../services/api';
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +12,7 @@ const LoginForm = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
+  const { getMemberByEmail } = useGymData();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -20,44 +21,49 @@ const LoginForm = () => {
     setIsLoading(true);
 
     try {
-      const credentials = {
-        email: formData.email,
-        password: formData.password,
-      };
-
-      let response;
-      if (formData.loginType === 'ADMIN') {
-        response = await authAPI.loginAdmin(credentials);
-      } else if (formData.loginType === 'TRAINER') {
-        response = await authAPI.loginTrainer(credentials);
-      } else {
-        response = await authAPI.loginClient(credentials);
-      }
-
-      const authData = response.data; // { token, email, role, userId }
-
-      if (!authData.token) {
-        setError('Access denied. You do not have permission for this role.');
+      // For demo: simulate login without backend
+      // In production, replace with actual API calls
+      if (!formData.email || !formData.password) {
+        setError('Please enter email and password');
         setIsLoading(false);
         return;
       }
 
+      if (formData.password.length < 6) {
+        setError('Password must be at least 6 characters');
+        setIsLoading(false);
+        return;
+      }
+
+      // For CLIENT role, look up the member by email
+      let userId = 'ADMIN001';
+      if (formData.loginType === 'CLIENT') {
+        const member = getMemberByEmail(formData.email);
+        if (member) {
+          userId = member.id;
+        } else {
+          // Default to M001 for demo if email not found
+          userId = 'M001';
+        }
+      }
+
+      // Simulate auth response
+      const authData = {
+        token: 'demo-token-' + Date.now(),
+        email: formData.email,
+        role: formData.loginType,
+        userId: userId,
+      };
+
       login(authData);
 
-      if (authData.role === 'ADMIN') {
-        navigate('/admin-dashboard');
-      } else if (authData.role === 'TRAINER') {
-        navigate('/admin-dashboard');
+      if (formData.loginType === 'ADMIN') {
+        navigate('/admin/members');
       } else {
-        navigate('/user-dashboard');
+        navigate('/client/home');
       }
     } catch (err) {
-      if (err.response && err.response.data) {
-        const data = err.response.data;
-        setError(data.message || data.error || 'Invalid email or password');
-      } else {
-        setError('Network error. Please check your connection.');
-      }
+      setError('Login failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
