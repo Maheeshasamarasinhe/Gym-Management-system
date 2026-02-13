@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Calendar, DollarSign, Apple, Dumbbell, Users, Edit, Save, X, Trash2, Plus, ArrowLeft, Bell } from 'lucide-react';
+import { Calendar, DollarSign, Apple, Dumbbell, Users, Edit, Save, X, Trash2, Plus, ArrowLeft, Search } from 'lucide-react';
 import { useGymData } from '../context/GymDataContext';
 
 const AdminMemberPage = () => {
@@ -9,10 +9,14 @@ const AdminMemberPage = () => {
   const navigate = useNavigate();
   const {
     getMember,
+    exercises: exerciseLibrary,
     addExerciseToMember,
     editMemberExercise,
     deleteMemberExercise,
     updateMemberNutrition,
+    addMealToMember,
+    editMemberMeal,
+    deleteMemberMeal,
   } = useGymData();
   const [activeSection, setActiveSection] = useState('about');
   const [isEditing, setIsEditing] = useState(false);
@@ -22,9 +26,19 @@ const AdminMemberPage = () => {
   const [editingExercise, setEditingExercise] = useState(null);
   const [exerciseForm, setExerciseForm] = useState({ name: '', steps: '', rounds: '', image: '', video: '' });
 
+  // Browse Exercises
+  const [showBrowseModal, setShowBrowseModal] = useState(false);
+  const [browseSearch, setBrowseSearch] = useState('');
+  const [browseCategory, setBrowseCategory] = useState('All');
+
   // Nutrition CRUD
   const [showNutritionModal, setShowNutritionModal] = useState(false);
   const [nutritionForm, setNutritionForm] = useState({ protein: 0, carbs: 0, water: 0, fiber: 0 });
+
+  // Meal Plan CRUD
+  const [showMealModal, setShowMealModal] = useState(false);
+  const [editingMeal, setEditingMeal] = useState(null);
+  const [mealForm, setMealForm] = useState({ name: '', time: '', items: '', calories: '' });
 
   // Get member data from shared context
   const member = getMember(memberId);
@@ -32,10 +46,10 @@ const AdminMemberPage = () => {
   // If member not found, show error
   if (!member) {
     return (
-      <div style={{ padding: '60px', textAlign: 'center', color: '#8892b0', fontFamily: "'Work Sans', sans-serif" }}>
+      <div style={{ padding: '60px', textAlign: 'center', color: '#a9a9a9', fontFamily: "'Muli', sans-serif" }}>
         <h2 style={{ color: '#fff', marginBottom: '16px' }}>Member Not Found</h2>
         <p>No member with ID "{memberId}" exists in the system.</p>
-        <button onClick={() => navigate('/admin/members')} style={{ marginTop: '24px', padding: '12px 24px', background: 'linear-gradient(135deg, #FF6B35, #F7931E)', border: 'none', borderRadius: '8px', color: '#fff', fontSize: '15px', cursor: 'pointer' }}>
+        <button onClick={() => navigate('/admin/members')} style={{ marginTop: '24px', padding: '12px 24px', background: '#f36100', border: 'none', borderRadius: '0', color: '#fff', fontSize: '15px', cursor: 'pointer', textTransform: 'uppercase', fontWeight: '700' }}>
           <ArrowLeft size={16} style={{ marginRight: '8px', verticalAlign: 'middle' }} /> Back to Members
         </button>
       </div>
@@ -59,6 +73,7 @@ const AdminMemberPage = () => {
   const schedule = member.schedule;
   const nutrition = member.nutrition;
   const attendance = member.attendance;
+  const mealPlan = member.mealPlan || [];
 
   const handleAddExercise = () => {
     setEditingExercise(null);
@@ -99,6 +114,26 @@ const AdminMemberPage = () => {
     setShowExerciseModal(false);
   };
 
+  const handleSelectFromLibrary = (exercise) => {
+    addExerciseToMember(memberId, {
+      name: exercise.name,
+      steps: exercise.steps,
+      rounds: exercise.rounds,
+      image: exercise.image,
+      video: exercise.video,
+      category: exercise.category,
+    });
+    setShowBrowseModal(false);
+  };
+
+  const filteredLibrary = exerciseLibrary.filter(ex => {
+    const matchSearch = ex.name.toLowerCase().includes(browseSearch.toLowerCase());
+    const matchCategory = browseCategory === 'All' || ex.category === browseCategory;
+    return matchSearch && matchCategory;
+  });
+
+  const libraryCategories = ['All', ...new Set(exerciseLibrary.map(ex => ex.category))];
+
   const handleEditNutrition = () => {
     setNutritionForm({ ...nutrition });
     setShowNutritionModal(true);
@@ -112,6 +147,43 @@ const AdminMemberPage = () => {
       fiber: Number(nutritionForm.fiber),
     });
     setShowNutritionModal(false);
+  };
+
+  // Meal Plan handlers
+  const handleAddMeal = () => {
+    setEditingMeal(null);
+    setMealForm({ name: '', time: '', items: '', calories: '' });
+    setShowMealModal(true);
+  };
+
+  const handleEditMeal = (meal) => {
+    setEditingMeal(meal);
+    setMealForm({
+      name: meal.name,
+      time: meal.time,
+      items: meal.items.join(', '),
+      calories: meal.calories,
+    });
+    setShowMealModal(true);
+  };
+
+  const handleDeleteMeal = (mealId) => {
+    deleteMemberMeal(memberId, mealId);
+  };
+
+  const handleSaveMeal = () => {
+    const mealData = {
+      name: mealForm.name,
+      time: mealForm.time,
+      items: mealForm.items.split(',').map(i => i.trim()).filter(Boolean),
+      calories: Number(mealForm.calories) || 0,
+    };
+    if (editingMeal) {
+      editMemberMeal(memberId, editingMeal.id, mealData);
+    } else {
+      addMealToMember(memberId, mealData);
+    }
+    setShowMealModal(false);
   };
 
   const renderAboutSection = () => (
@@ -148,14 +220,14 @@ const AdminMemberPage = () => {
           <h3 style={styles.chartTitle}>WEIGHT PROGRESS (KG)</h3>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={weightData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-              <XAxis dataKey="month" stroke="#8892b0" />
-              <YAxis stroke="#8892b0" />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+              <XAxis dataKey="month" stroke="#a9a9a9" />
+              <YAxis stroke="#a9a9a9" />
               <Tooltip
-                contentStyle={{ background: '#1a1f3a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
+                contentStyle={{ background: '#0a0a0a', border: '1px solid #363636', borderRadius: '0' }}
                 labelStyle={{ color: '#fff' }}
               />
-              <Line type="monotone" dataKey="weight" stroke="#FF6B35" strokeWidth={3} dot={{ fill: '#FF6B35', r: 6 }} />
+              <Line type="monotone" dataKey="weight" stroke="#f36100" strokeWidth={3} dot={{ fill: '#f36100', r: 6 }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -164,14 +236,14 @@ const AdminMemberPage = () => {
           <h3 style={styles.chartTitle}>CHEST SIZE (CM)</h3>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={chestData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-              <XAxis dataKey="month" stroke="#8892b0" />
-              <YAxis stroke="#8892b0" />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+              <XAxis dataKey="month" stroke="#a9a9a9" />
+              <YAxis stroke="#a9a9a9" />
               <Tooltip
-                contentStyle={{ background: '#1a1f3a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
+                contentStyle={{ background: '#0a0a0a', border: '1px solid #363636', borderRadius: '0' }}
                 labelStyle={{ color: '#fff' }}
               />
-              <Line type="monotone" dataKey="chest" stroke="#4ECDC4" strokeWidth={3} dot={{ fill: '#4ECDC4', r: 6 }} />
+              <Line type="monotone" dataKey="chest" stroke="#f36100" strokeWidth={3} dot={{ fill: '#f36100', r: 6 }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -209,8 +281,8 @@ const AdminMemberPage = () => {
       <div style={styles.sectionHeader}>
         <h3 style={styles.sectionTitle}>Exercise Schedule</h3>
         <div style={{ display: 'flex', gap: '12px' }}>
-          <button style={styles.addButton} onClick={() => navigate('/admin/exercises')}>
-            Browse Exercises
+          <button style={styles.addButton} onClick={() => { setBrowseSearch(''); setBrowseCategory('All'); setShowBrowseModal(true); }}>
+            <Search size={16} /> Browse Exercises
           </button>
           <button style={styles.addButton} onClick={handleAddExercise}>
             <Plus size={16} /> Add Exercise
@@ -241,7 +313,7 @@ const AdminMemberPage = () => {
       </div>
 
       {schedule.length === 0 && (
-        <div style={{ textAlign: 'center', padding: '60px', color: '#8892b0' }}>
+        <div style={{ textAlign: 'center', padding: '60px', color: '#a9a9a9' }}>
           <Dumbbell size={48} style={{ marginBottom: '16px', opacity: 0.5 }} />
           <p>No exercises assigned yet. Add exercises from the library.</p>
         </div>
@@ -284,6 +356,47 @@ const AdminMemberPage = () => {
           <div style={styles.nutritionSubtext}>per day</div>
         </div>
       </div>
+
+      {/* Meal Plan Section */}
+      <div style={{ ...styles.sectionHeader, marginTop: '48px' }}>
+        <h3 style={styles.sectionTitle}>Meal Plan</h3>
+        <button style={styles.addButton} onClick={handleAddMeal}>
+          <Plus size={16} /> Add Meal
+        </button>
+      </div>
+
+      <div style={styles.mealPlanList}>
+        {mealPlan.map(meal => (
+          <div key={meal.id} style={styles.mealPlanCard}>
+            <div style={styles.mealPlanHeader}>
+              <div>
+                <div style={styles.mealPlanName}>{meal.name}</div>
+                <div style={styles.mealPlanTime}>{meal.time}</div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div style={styles.mealPlanCalories}>{meal.calories} kcal</div>
+                <button style={styles.iconButton} onClick={() => handleEditMeal(meal)}><Edit size={16} /></button>
+                <button style={{ ...styles.iconButton, ...styles.deleteIconButton }} onClick={() => handleDeleteMeal(meal.id)}><Trash2 size={16} /></button>
+              </div>
+            </div>
+            <div style={styles.mealPlanItems}>
+              {meal.items.map((item, i) => (
+                <span key={i} style={styles.mealPlanItem}>
+                  <span style={styles.mealPlanDot} />
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {mealPlan.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '60px', color: '#a9a9a9' }}>
+          <Apple size={48} style={{ marginBottom: '16px', opacity: 0.5 }} />
+          <p>No meals added yet. Create a meal plan for this member.</p>
+        </div>
+      )}
     </div>
   );
 
@@ -324,7 +437,7 @@ const AdminMemberPage = () => {
   return (
     <div style={styles.container}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Muli:wght@300;400;600;700&display=swap');
         
         @keyframes fadeIn {
           from { opacity: 0; }
@@ -336,13 +449,12 @@ const AdminMemberPage = () => {
         }
         
         .sidebar-item:hover {
-          transform: translateX(8px);
-          background: rgba(255, 107, 53, 0.1) !important;
+          background: #252525 !important;
         }
         
         .sidebar-item.active {
-          background: rgba(255, 107, 53, 0.2) !important;
-          border-left: 4px solid #FF6B35 !important;
+          background: #252525 !important;
+          border-left: 4px solid #f36100 !important;
         }
       `}</style>
 
@@ -387,6 +499,114 @@ const AdminMemberPage = () => {
         {activeSection === 'nutrition' && renderNutritionSection()}
         {activeSection === 'attendance' && renderAttendanceSection()}
       </div>
+
+      {/* Browse Exercises Modal */}
+      {showBrowseModal && (
+        <div style={styles.modalOverlay} onClick={() => setShowBrowseModal(false)}>
+          <div style={{ ...styles.modalContent, maxWidth: '720px', maxHeight: '80vh', display: 'flex', flexDirection: 'column' }} onClick={(e) => e.stopPropagation()}>
+            <div style={styles.modalHeader}>
+              <h2 style={styles.modalTitle}>Browse Exercise Library</h2>
+              <button style={styles.closeButton} onClick={() => setShowBrowseModal(false)}>
+                <X size={24} />
+              </button>
+            </div>
+
+            <div style={{ padding: '16px 32px', borderBottom: '1px solid #464646' }}>
+              <div style={{ position: 'relative', marginBottom: '16px' }}>
+                <Search size={18} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#a9a9a9' }} />
+                <input
+                  type="text"
+                  value={browseSearch}
+                  onChange={(e) => setBrowseSearch(e.target.value)}
+                  placeholder="Search exercises..."
+                  style={{ ...styles.input, paddingLeft: '42px' }}
+                />
+              </div>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                {libraryCategories.map(cat => (
+                  <button
+                    key={cat}
+                    onClick={() => setBrowseCategory(cat)}
+                    style={{
+                      padding: '6px 16px',
+                      background: browseCategory === cat ? '#f36100' : 'transparent',
+                      border: browseCategory === cat ? '1px solid #f36100' : '1px solid #464646',
+                      color: browseCategory === cat ? '#fff' : '#a9a9a9',
+                      borderRadius: '0',
+                      fontSize: '13px',
+                      fontWeight: '700',
+                      cursor: 'pointer',
+                      textTransform: 'uppercase',
+                      letterSpacing: '1px',
+                    }}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px' }}>
+              {filteredLibrary.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '40px', color: '#a9a9a9' }}>
+                  <Dumbbell size={40} style={{ marginBottom: '12px', opacity: 0.5 }} />
+                  <p>No exercises match your search.</p>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {filteredLibrary.map(exercise => {
+                    const alreadyAdded = schedule.some(s => s.name === exercise.name);
+                    return (
+                      <div
+                        key={exercise.id}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '16px',
+                          padding: '16px',
+                          background: '#151515',
+                          border: '1px solid #363636',
+                          borderRadius: '0',
+                          opacity: alreadyAdded ? 0.5 : 1,
+                        }}
+                      >
+                        <img src={exercise.image} alt={exercise.name} style={{ width: '64px', height: '64px', objectFit: 'cover', borderRadius: '0', flexShrink: 0 }} />
+                        <div style={{ flex: 1 }}>
+                          <div style={{ color: '#fff', fontSize: '16px', fontWeight: '600', marginBottom: '4px', fontFamily: "'Oswald', sans-serif", textTransform: 'uppercase', letterSpacing: '1px' }}>{exercise.name}</div>
+                          <div style={{ display: 'flex', gap: '16px', color: '#a9a9a9', fontSize: '13px' }}>
+                            <span>{exercise.steps} Steps</span>
+                            <span>{exercise.rounds} Rounds</span>
+                            <span style={{ color: '#f36100' }}>{exercise.category}</span>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => !alreadyAdded && handleSelectFromLibrary(exercise)}
+                          disabled={alreadyAdded}
+                          style={{
+                            padding: '10px 20px',
+                            background: alreadyAdded ? '#252525' : '#f36100',
+                            border: 'none',
+                            borderRadius: '0',
+                            color: alreadyAdded ? '#a9a9a9' : '#fff',
+                            fontSize: '13px',
+                            fontWeight: '700',
+                            cursor: alreadyAdded ? 'default' : 'pointer',
+                            textTransform: 'uppercase',
+                            letterSpacing: '1px',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {alreadyAdded ? 'Added' : '+ Add'}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Exercise Modal */}
       {showExerciseModal && (
@@ -475,6 +695,48 @@ const AdminMemberPage = () => {
           </div>
         </div>
       )}
+
+      {/* Meal Plan Modal */}
+      {showMealModal && (
+        <div style={styles.modalOverlay} onClick={() => setShowMealModal(false)}>
+          <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <div style={styles.modalHeader}>
+              <h2 style={styles.modalTitle}>
+                {editingMeal ? 'Edit Meal' : 'Add Meal'}
+              </h2>
+              <button style={styles.closeButton} onClick={() => setShowMealModal(false)}>
+                <X size={24} />
+              </button>
+            </div>
+            <div style={styles.modalBody}>
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Meal Name</label>
+                <input type="text" value={mealForm.name} onChange={(e) => setMealForm({ ...mealForm, name: e.target.value })} style={styles.input} placeholder="e.g., Breakfast, Lunch, Dinner" />
+              </div>
+              <div style={styles.formRow}>
+                <div style={styles.formGroup}>
+                  <label style={styles.label}>Time</label>
+                  <input type="text" value={mealForm.time} onChange={(e) => setMealForm({ ...mealForm, time: e.target.value })} style={styles.input} placeholder="e.g., 7:00 AM" />
+                </div>
+                <div style={styles.formGroup}>
+                  <label style={styles.label}>Calories (kcal)</label>
+                  <input type="number" value={mealForm.calories} onChange={(e) => setMealForm({ ...mealForm, calories: e.target.value })} style={styles.input} placeholder="0" />
+                </div>
+              </div>
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Food Items (comma separated)</label>
+                <input type="text" value={mealForm.items} onChange={(e) => setMealForm({ ...mealForm, items: e.target.value })} style={styles.input} placeholder="e.g., Oatmeal, Eggs, Toast, Orange juice" />
+              </div>
+            </div>
+            <div style={styles.modalFooter}>
+              <button style={styles.cancelButton} onClick={() => setShowMealModal(false)}>Cancel</button>
+              <button style={styles.saveButton} onClick={handleSaveMeal}>
+                <Save size={18} /> {editingMeal ? 'Save Changes' : 'Add Meal'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -483,12 +745,12 @@ const styles = {
   container: {
     display: 'flex',
     minHeight: 'calc(100vh - 70px)',
-    fontFamily: "'Work Sans', sans-serif",
+    fontFamily: "'Muli', sans-serif",
   },
   sidebar: {
     width: '320px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    borderRight: '1px solid rgba(255, 255, 255, 0.1)',
+    background: '#0a0a0a',
+    borderRight: '1px solid #464646',
     padding: '24px 0',
     flexShrink: 0,
   },
@@ -499,7 +761,7 @@ const styles = {
     padding: '10px 32px',
     background: 'transparent',
     border: 'none',
-    color: '#8892b0',
+    color: '#a9a9a9',
     fontSize: '14px',
     cursor: 'pointer',
     marginBottom: '24px',
@@ -509,15 +771,15 @@ const styles = {
     display: 'flex',
     gap: '16px',
     padding: '0 32px 32px 32px',
-    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+    borderBottom: '1px solid #464646',
     marginBottom: '32px',
     alignItems: 'center',
   },
   memberAvatar: {
     width: '60px',
     height: '60px',
-    borderRadius: '12px',
-    background: 'linear-gradient(135deg, #FF6B35, #F7931E)',
+    borderRadius: '0',
+    background: '#f36100',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -531,10 +793,11 @@ const styles = {
     fontWeight: '600',
     color: '#fff',
     marginBottom: '4px',
+    fontFamily: "'Oswald', sans-serif",
   },
   memberHeaderId: {
     fontSize: '14px',
-    color: '#8892b0',
+    color: '#a9a9a9',
   },
   sidebarMenu: {
     display: 'flex',
@@ -566,25 +829,27 @@ const styles = {
     marginBottom: '32px',
   },
   sectionTitle: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '36px',
     color: '#fff',
     letterSpacing: '2px',
     margin: '0 0 32px 0',
+    textTransform: 'uppercase',
   },
   addButton: {
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
-    background: 'rgba(78, 205, 196, 0.2)',
-    border: '1px solid #4ECDC4',
-    color: '#4ECDC4',
+    background: 'transparent',
+    border: '1px solid #f36100',
+    color: '#f36100',
     padding: '12px 24px',
-    borderRadius: '8px',
+    borderRadius: '0',
     fontSize: '14px',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
+    textTransform: 'uppercase',
   },
   infoGrid: {
     display: 'grid',
@@ -593,14 +858,14 @@ const styles = {
     marginBottom: '48px',
   },
   infoCard: {
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '12px',
+    background: '#252525',
+    border: '1px solid #464646',
+    borderRadius: '0',
     padding: '24px',
   },
   infoLabel: {
     fontSize: '12px',
-    color: '#8892b0',
+    color: '#a9a9a9',
     textTransform: 'uppercase',
     letterSpacing: '1px',
     marginBottom: '8px',
@@ -616,17 +881,18 @@ const styles = {
     gap: '32px',
   },
   chartCard: {
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '12px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
     padding: '32px',
   },
   chartTitle: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '20px',
     color: '#fff',
     letterSpacing: '2px',
     marginBottom: '24px',
+    textTransform: 'uppercase',
   },
   paymentList: {
     display: 'flex',
@@ -637,9 +903,9 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '12px',
+    background: '#252525',
+    border: '1px solid #464646',
+    borderRadius: '0',
     padding: '24px',
   },
   paymentMonth: {
@@ -650,7 +916,7 @@ const styles = {
   },
   paymentDate: {
     fontSize: '14px',
-    color: '#8892b0',
+    color: '#a9a9a9',
   },
   paymentRight: {
     display: 'flex',
@@ -660,18 +926,18 @@ const styles = {
   paymentAmount: {
     fontSize: '24px',
     fontWeight: '700',
-    color: '#4ECDC4',
+    color: '#f36100',
   },
   paymentStatus: {
     padding: '8px 16px',
-    borderRadius: '8px',
+    borderRadius: '0',
     fontSize: '12px',
     fontWeight: '700',
     letterSpacing: '1px',
   },
   paidStatus: {
-    background: 'rgba(78, 205, 196, 0.2)',
-    color: '#4ECDC4',
+    background: 'rgba(243, 97, 0, 0.2)',
+    color: '#f36100',
   },
   pendingStatus: {
     background: 'rgba(255, 193, 7, 0.2)',
@@ -683,9 +949,9 @@ const styles = {
     gap: '24px',
   },
   exerciseCard: {
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '12px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
     overflow: 'hidden',
   },
   exerciseImage: {
@@ -702,6 +968,7 @@ const styles = {
     color: '#fff',
     marginBottom: '12px',
     marginTop: 0,
+    fontFamily: "'Oswald', sans-serif",
   },
   exerciseDetails: {
     display: 'flex',
@@ -710,13 +977,13 @@ const styles = {
   },
   exerciseDetail: {
     padding: '6px 12px',
-    background: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: '6px',
+    background: '#252525',
+    borderRadius: '0',
     fontSize: '13px',
-    color: '#8892b0',
+    color: '#a9a9a9',
   },
   videoLink: {
-    color: '#FF6B35',
+    color: '#f36100',
     fontSize: '14px',
     fontWeight: '600',
     textDecoration: 'none',
@@ -728,19 +995,19 @@ const styles = {
     gap: '8px',
   },
   iconButton: {
-    background: 'rgba(78, 205, 196, 0.1)',
-    border: '1px solid rgba(78, 205, 196, 0.3)',
-    color: '#4ECDC4',
+    background: 'transparent',
+    border: '1px solid #f36100',
+    color: '#f36100',
     padding: '8px 12px',
-    borderRadius: '6px',
+    borderRadius: '0',
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
   },
   deleteIconButton: {
-    background: 'rgba(255, 107, 107, 0.1)',
-    border: '1px solid rgba(255, 107, 107, 0.3)',
-    color: '#FF6B6B',
+    background: 'transparent',
+    border: '1px solid #a9a9a9',
+    color: '#a9a9a9',
   },
   nutritionGrid: {
     display: 'grid',
@@ -748,9 +1015,9 @@ const styles = {
     gap: '24px',
   },
   nutritionCard: {
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '12px',
+    background: '#252525',
+    border: '1px solid #464646',
+    borderRadius: '0',
     padding: '32px',
     textAlign: 'center',
   },
@@ -760,7 +1027,7 @@ const styles = {
   },
   nutritionLabel: {
     fontSize: '14px',
-    color: '#8892b0',
+    color: '#a9a9a9',
     textTransform: 'uppercase',
     letterSpacing: '1px',
     marginBottom: '8px',
@@ -773,7 +1040,65 @@ const styles = {
   },
   nutritionSubtext: {
     fontSize: '12px',
-    color: '#8892b0',
+    color: '#a9a9a9',
+  },
+  // Meal Plan styles
+  mealPlanList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+  },
+  mealPlanCard: {
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
+    padding: '24px',
+  },
+  mealPlanHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '16px',
+  },
+  mealPlanName: {
+    fontFamily: "'Oswald', sans-serif",
+    fontSize: '22px',
+    color: '#fff',
+    letterSpacing: '1px',
+    textTransform: 'uppercase',
+  },
+  mealPlanTime: {
+    color: '#a9a9a9',
+    fontSize: '14px',
+    marginTop: '4px',
+  },
+  mealPlanCalories: {
+    color: '#f36100',
+    fontSize: '18px',
+    fontWeight: '700',
+  },
+  mealPlanItems: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '10px',
+  },
+  mealPlanItem: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    color: '#c4c4c4',
+    fontSize: '14px',
+    padding: '8px 16px',
+    background: '#252525',
+    borderRadius: '0',
+  },
+  mealPlanDot: {
+    width: '6px',
+    height: '6px',
+    borderRadius: '50%',
+    background: '#f36100',
+    flexShrink: 0,
+    display: 'inline-block',
   },
   attendanceList: {
     display: 'flex',
@@ -781,9 +1106,9 @@ const styles = {
     gap: '16px',
   },
   attendanceCard: {
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '12px',
+    background: '#252525',
+    border: '1px solid #464646',
+    borderRadius: '0',
     padding: '24px',
   },
   attendanceHeader: {
@@ -800,25 +1125,25 @@ const styles = {
   attendancePercent: {
     fontSize: '20px',
     fontWeight: '700',
-    color: '#4ECDC4',
+    color: '#f36100',
   },
   attendanceBar: {
     width: '100%',
     height: '12px',
-    background: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: '6px',
+    background: '#363636',
+    borderRadius: '0',
     overflow: 'hidden',
     marginBottom: '8px',
   },
   attendanceProgress: {
     height: '100%',
-    background: 'linear-gradient(90deg, #FF6B35, #4ECDC4)',
-    borderRadius: '6px',
+    background: '#f36100',
+    borderRadius: '0',
     transition: 'width 0.5s ease',
   },
   attendanceDays: {
     fontSize: '14px',
-    color: '#8892b0',
+    color: '#a9a9a9',
   },
   // Modal styles
   modalOverlay: {
@@ -827,17 +1152,16 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    background: 'rgba(0, 0, 0, 0.8)',
-    backdropFilter: 'blur(8px)',
+    background: 'rgba(0, 0, 0, 0.85)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1000,
   },
   modalContent: {
-    background: '#1a1f3a',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
     width: '90%',
     maxWidth: '560px',
     maxHeight: '90vh',
@@ -848,19 +1172,20 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '28px 32px',
-    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+    borderBottom: '1px solid #464646',
   },
   modalTitle: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '28px',
     color: '#fff',
     margin: 0,
     letterSpacing: '2px',
+    textTransform: 'uppercase',
   },
   closeButton: {
     background: 'transparent',
     border: 'none',
-    color: '#8892b0',
+    color: '#a9a9a9',
     cursor: 'pointer',
     padding: '8px',
   },
@@ -877,7 +1202,7 @@ const styles = {
   },
   label: {
     display: 'block',
-    color: '#8892b0',
+    color: '#a9a9a9',
     fontSize: '13px',
     fontWeight: '600',
     marginBottom: '8px',
@@ -887,9 +1212,9 @@ const styles = {
   input: {
     width: '100%',
     padding: '12px 16px',
-    background: 'rgba(255, 255, 255, 0.05)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '8px',
+    background: 'transparent',
+    border: '1px solid #363636',
+    borderRadius: '0',
     color: '#fff',
     fontSize: '15px',
     outline: 'none',
@@ -899,18 +1224,19 @@ const styles = {
     display: 'flex',
     gap: '16px',
     padding: '24px 32px',
-    borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+    borderTop: '1px solid #464646',
   },
   cancelButton: {
     flex: 1,
     padding: '12px',
-    background: 'rgba(255, 255, 255, 0.05)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '8px',
-    color: '#8892b0',
+    background: 'transparent',
+    border: '1px solid #464646',
+    borderRadius: '0',
+    color: '#a9a9a9',
     fontSize: '15px',
     fontWeight: '600',
     cursor: 'pointer',
+    textTransform: 'uppercase',
   },
   saveButton: {
     flex: 1,
@@ -919,13 +1245,14 @@ const styles = {
     justifyContent: 'center',
     gap: '8px',
     padding: '12px',
-    background: 'linear-gradient(135deg, #FF6B35, #F7931E)',
+    background: '#f36100',
     border: 'none',
-    borderRadius: '8px',
+    borderRadius: '0',
     color: '#fff',
     fontSize: '15px',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
+    textTransform: 'uppercase',
   },
 };
 

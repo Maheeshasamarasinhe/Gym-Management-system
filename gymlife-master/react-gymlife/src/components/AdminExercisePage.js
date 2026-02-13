@@ -65,7 +65,7 @@ const AdminExercisePage = () => {
   return (
     <div style={styles.container}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Muli:wght@300;400;600;700&display=swap');
         
         @keyframes slideIn {
           from { opacity: 0; transform: translateY(20px); }
@@ -83,8 +83,8 @@ const AdminExercisePage = () => {
         }
 
         .exercise-card:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 20px 40px rgba(255, 107, 53, 0.2);
+          border-left: 4px solid #f36100;
+          background: #252525 !important;
         }
 
         .modal-content {
@@ -278,7 +278,7 @@ const AdminExercisePage = () => {
 const styles = {
   container: {
     padding: '40px',
-    fontFamily: "'Work Sans', sans-serif",
+    fontFamily: "'Muli', sans-serif",
   },
   header: {
     display: 'flex',
@@ -287,15 +287,15 @@ const styles = {
     marginBottom: '48px',
   },
   title: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '56px',
     color: '#fff',
     margin: '0',
     letterSpacing: '4px',
-    textShadow: '2px 2px 20px rgba(255, 107, 53, 0.3)',
+    textTransform: 'uppercase',
   },
   subtitle: {
-    color: '#8892b0',
+    color: '#a9a9a9',
     fontSize: '18px',
     marginTop: '8px',
   },
@@ -303,15 +303,15 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: '12px',
-    background: 'linear-gradient(135deg, #FF6B35, #F7931E)',
+    background: '#f36100',
     border: 'none',
     color: '#fff',
     padding: '16px 32px',
-    borderRadius: '12px',
+    borderRadius: '0',
     fontSize: '16px',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
-    boxShadow: '0 8px 24px rgba(255, 107, 53, 0.3)',
+    textTransform: 'uppercase',
   },
   exerciseGrid: {
     display: 'grid',
@@ -319,9 +319,9 @@ const styles = {
     gap: '32px',
   },
   exerciseCard: {
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
     overflow: 'hidden',
   },
   imageContainer: {
@@ -338,11 +338,10 @@ const styles = {
     position: 'absolute',
     top: '16px',
     right: '16px',
-    background: 'rgba(0, 0, 0, 0.7)',
-    backdropFilter: 'blur(10px)',
+    background: 'rgba(0, 0, 0, 0.85)',
     padding: '8px 16px',
-    borderRadius: '8px',
-    color: '#FF6B35',
+    borderRadius: '0',
+    color: '#f36100',
     fontSize: '12px',
     fontWeight: '700',
     textTransform: 'uppercase',
@@ -352,11 +351,12 @@ const styles = {
     padding: '24px',
   },
   exerciseName: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '28px',
     color: '#fff',
     margin: '0 0 20px 0',
     letterSpacing: '1px',
+    textTransform: 'uppercase',
   },
   exerciseStats: {
     display: 'flex',
@@ -364,8 +364,8 @@ const styles = {
     gap: '20px',
     marginBottom: '20px',
     padding: '16px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    borderRadius: '12px',
+    background: '#252525',
+    borderRadius: '0',
   },
   statItem: {
     flex: 1,
@@ -374,23 +374,23 @@ const styles = {
   statValue: {
     fontSize: '28px',
     fontWeight: '700',
-    color: '#4ECDC4',
+    color: '#f36100',
     marginBottom: '4px',
   },
   statLabel: {
     fontSize: '12px',
-    color: '#8892b0',
+    color: '#a9a9a9',
     textTransform: 'uppercase',
     letterSpacing: '1px',
   },
   statDivider: {
     width: '1px',
     height: '40px',
-    background: 'rgba(255, 255, 255, 0.1)',
+    background: '#464646',
   },
   videoLink: {
     display: 'block',
-    color: '#FF6B35',
+    color: '#f36100',
     fontSize: '14px',
     fontWeight: '600',
     textDecoration: 'none',
@@ -406,14 +406,15 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     gap: '8px',
-    background: 'rgba(78, 205, 196, 0.1)',
-    border: '1px solid rgba(78, 205, 196, 0.3)',
-    color: '#4ECDC4',
+    background: 'transparent',
+    border: '1px solid #f36100',
+    color: '#f36100',
     padding: '12px',
-    borderRadius: '8px',
+    borderRadius: '0',
     fontSize: '14px',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
+    textTransform: 'uppercase',
   },
   deleteButton: {
     flex: 1,
@@ -421,14 +422,15 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     gap: '8px',
-    background: 'rgba(255, 107, 107, 0.1)',
-    border: '1px solid rgba(255, 107, 107, 0.3)',
-    color: '#FF6B6B',
+    background: 'transparent',
+    border: '1px solid #a9a9a9',
+    color: '#a9a9a9',
     padding: '12px',
-    borderRadius: '8px',
+    borderRadius: '0',
     fontSize: '14px',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
+    textTransform: 'uppercase',
   },
   modalOverlay: {
     position: 'fixed',
@@ -436,17 +438,16 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    background: 'rgba(0, 0, 0, 0.8)',
-    backdropFilter: 'blur(8px)',
+    background: 'rgba(0, 0, 0, 0.85)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1000,
   },
   modalContent: {
-    background: '#1a1f3a',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
     width: '90%',
     maxWidth: '600px',
     maxHeight: '90vh',
@@ -457,19 +458,20 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '32px',
-    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+    borderBottom: '1px solid #464646',
   },
   modalTitle: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '32px',
     color: '#fff',
     margin: 0,
     letterSpacing: '2px',
+    textTransform: 'uppercase',
   },
   closeButton: {
     background: 'transparent',
     border: 'none',
-    color: '#8892b0',
+    color: '#a9a9a9',
     cursor: 'pointer',
     padding: '8px',
   },
@@ -486,7 +488,7 @@ const styles = {
   },
   label: {
     display: 'block',
-    color: '#8892b0',
+    color: '#a9a9a9',
     fontSize: '14px',
     fontWeight: '600',
     marginBottom: '8px',
@@ -496,9 +498,9 @@ const styles = {
   input: {
     width: '100%',
     padding: '14px 16px',
-    background: 'rgba(255, 255, 255, 0.05)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '8px',
+    background: 'transparent',
+    border: '1px solid #363636',
+    borderRadius: '0',
     color: '#fff',
     fontSize: '16px',
     outline: 'none',
@@ -507,9 +509,9 @@ const styles = {
   select: {
     width: '100%',
     padding: '14px 16px',
-    background: 'rgba(255, 255, 255, 0.05)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '8px',
+    background: '#151515',
+    border: '1px solid #363636',
+    borderRadius: '0',
     color: '#fff',
     fontSize: '16px',
     outline: 'none',
@@ -520,18 +522,19 @@ const styles = {
     display: 'flex',
     gap: '16px',
     padding: '32px',
-    borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+    borderTop: '1px solid #464646',
   },
   cancelButtonModal: {
     flex: 1,
     padding: '14px',
-    background: 'rgba(255, 255, 255, 0.05)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '8px',
-    color: '#8892b0',
+    background: 'transparent',
+    border: '1px solid #464646',
+    borderRadius: '0',
+    color: '#a9a9a9',
     fontSize: '16px',
     fontWeight: '600',
     cursor: 'pointer',
+    textTransform: 'uppercase',
   },
   saveButton: {
     flex: 1,
@@ -540,13 +543,14 @@ const styles = {
     justifyContent: 'center',
     gap: '8px',
     padding: '14px',
-    background: 'linear-gradient(135deg, #FF6B35, #F7931E)',
+    background: '#f36100',
     border: 'none',
-    borderRadius: '8px',
+    borderRadius: '0',
     color: '#fff',
     fontSize: '16px',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
+    textTransform: 'uppercase',
   },
 };
 

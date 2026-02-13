@@ -30,7 +30,7 @@ const ClientSchedulePage = () => {
   return (
     <div style={styles.container}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Muli:wght@300;400;600;700&display=swap');
         
         @keyframes slideIn {
           from { opacity: 0; transform: translateY(20px); }
@@ -39,11 +39,12 @@ const ClientSchedulePage = () => {
 
         .exercise-card {
           animation: slideIn 0.4s ease-out backwards;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: all 0.3s ease;
         }
 
         .exercise-card:hover {
-          transform: translateX(8px);
+          border-left: 4px solid #f36100;
+          background: #252525 !important;
         }
 
         .check-button {
@@ -51,7 +52,9 @@ const ClientSchedulePage = () => {
         }
 
         .check-button:hover {
-          transform: scale(1.05);
+          background: #f36100 !important;
+          color: #fff !important;
+          border-color: #f36100 !important;
         }
       `}</style>
 
@@ -104,7 +107,7 @@ const ClientSchedulePage = () => {
               />
               {exercise.completed && (
                 <div style={styles.completedOverlay}>
-                  <CheckCircle size={48} color="#4ECDC4" />
+                  <CheckCircle size={48} color="#f36100" />
                 </div>
               )}
               <div style={styles.categoryBadge}>{exercise.category}</div>
@@ -168,25 +171,25 @@ const ClientSchedulePage = () => {
 const styles = {
   container: {
     padding: '40px',
-    fontFamily: "'Work Sans', sans-serif",
+    fontFamily: "'Muli', sans-serif",
   },
   header: {
     marginBottom: '48px',
   },
   title: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '56px',
     color: '#fff',
     margin: '0',
     letterSpacing: '4px',
-    textShadow: '2px 2px 20px rgba(255, 107, 53, 0.3)',
+    textTransform: 'uppercase',
   },
-  subtitle: { color: '#8892b0', fontSize: '18px', marginTop: '8px' },
+  subtitle: { color: '#a9a9a9', fontSize: '18px', marginTop: '8px' },
   progressSection: {
     padding: '32px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
     marginBottom: '40px',
   },
   progressHeader: {
@@ -196,25 +199,26 @@ const styles = {
     marginBottom: '20px',
   },
   progressTitle: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '24px',
     color: '#fff',
     letterSpacing: '2px',
     marginBottom: '8px',
+    textTransform: 'uppercase',
   },
-  progressText: { color: '#8892b0', fontSize: '16px' },
-  progressPercentage: { fontSize: '48px', fontWeight: '700', color: '#4ECDC4' },
+  progressText: { color: '#a9a9a9', fontSize: '16px' },
+  progressPercentage: { fontSize: '48px', fontWeight: '700', color: '#f36100' },
   progressBar: {
     width: '100%',
     height: '16px',
-    background: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: '8px',
+    background: '#252525',
+    borderRadius: '0',
     overflow: 'hidden',
   },
   progressBarFill: {
     height: '100%',
-    background: 'linear-gradient(90deg, #FF6B35, #4ECDC4)',
-    borderRadius: '8px',
+    background: '#f36100',
+    borderRadius: '0',
     transition: 'width 0.5s ease',
   },
   exercisesList: {
@@ -225,22 +229,22 @@ const styles = {
   exerciseCard: {
     display: 'flex',
     gap: '24px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
     overflow: 'hidden',
     padding: '24px',
   },
   exerciseCardCompleted: {
-    background: 'rgba(78, 205, 196, 0.05)',
-    border: '1px solid rgba(78, 205, 196, 0.2)',
+    background: '#151515',
+    border: '1px solid #f36100',
   },
   exerciseImageContainer: {
     position: 'relative',
     width: '200px',
     height: '200px',
     flexShrink: 0,
-    borderRadius: '12px',
+    borderRadius: '0',
     overflow: 'hidden',
   },
   exerciseImage: { width: '100%', height: '100%', objectFit: 'cover' },
@@ -257,10 +261,10 @@ const styles = {
     position: 'absolute',
     top: '12px',
     right: '12px',
-    background: 'rgba(0, 0, 0, 0.8)',
+    background: '#000',
     padding: '6px 12px',
-    borderRadius: '6px',
-    color: '#FF6B35',
+    borderRadius: '0',
+    color: '#f36100',
     fontSize: '12px',
     fontWeight: '700',
     textTransform: 'uppercase',
@@ -274,34 +278,36 @@ const styles = {
   },
   exerciseMain: { flex: 1 },
   exerciseName: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '32px',
     color: '#fff',
     margin: '0 0 16px 0',
     letterSpacing: '2px',
+    textTransform: 'uppercase',
   },
   exerciseDetails: {
     display: 'flex',
     alignItems: 'center',
     gap: '16px',
     marginBottom: '20px',
-    color: '#8892b0',
+    color: '#a9a9a9',
     fontSize: '16px',
   },
   detailItem: { display: 'flex', alignItems: 'center', gap: '8px' },
-  detailDivider: { color: '#8892b0' },
+  detailDivider: { color: '#a9a9a9' },
   videoButton: {
     display: 'inline-flex',
     alignItems: 'center',
     gap: '8px',
     padding: '12px 24px',
-    background: 'rgba(255, 107, 53, 0.1)',
-    border: '1px solid rgba(255, 107, 53, 0.3)',
-    borderRadius: '8px',
-    color: '#FF6B35',
+    background: 'transparent',
+    border: '1px solid #f36100',
+    borderRadius: '0',
+    color: '#f36100',
     fontSize: '14px',
-    fontWeight: '600',
+    fontWeight: '700',
     textDecoration: 'none',
+    textTransform: 'uppercase',
   },
   checkButton: {
     display: 'flex',
@@ -309,37 +315,40 @@ const styles = {
     justifyContent: 'center',
     gap: '12px',
     padding: '16px 32px',
-    background: 'rgba(78, 205, 196, 0.1)',
-    border: '1px solid rgba(78, 205, 196, 0.3)',
-    borderRadius: '8px',
-    color: '#4ECDC4',
+    background: 'transparent',
+    border: '1px solid #f36100',
+    borderRadius: '0',
+    color: '#f36100',
     fontSize: '16px',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
     alignSelf: 'flex-start',
     marginTop: '12px',
+    textTransform: 'uppercase',
   },
   checkButtonCompleted: {
-    background: 'rgba(78, 205, 196, 0.2)',
-    border: '1px solid #4ECDC4',
+    background: '#f36100',
+    border: '1px solid #f36100',
+    color: '#fff',
   },
   congratsCard: {
     marginTop: '40px',
     padding: '48px',
-    background: 'linear-gradient(135deg, rgba(78, 205, 196, 0.1), rgba(255, 107, 53, 0.1))',
-    border: '2px solid rgba(78, 205, 196, 0.3)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '2px solid #f36100',
+    borderRadius: '0',
     textAlign: 'center',
   },
   congratsIcon: { fontSize: '64px', marginBottom: '16px' },
   congratsTitle: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '36px',
     color: '#fff',
     letterSpacing: '2px',
     marginBottom: '12px',
+    textTransform: 'uppercase',
   },
-  congratsText: { fontSize: '18px', color: '#8892b0' },
+  congratsText: { fontSize: '18px', color: '#a9a9a9' },
 };
 
 export default ClientSchedulePage;

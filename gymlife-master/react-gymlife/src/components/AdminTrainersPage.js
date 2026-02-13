@@ -10,7 +10,7 @@ const AdminTrainersPage = () => {
   return (
     <div style={styles.container}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Muli:wght@300;400;600;700&display=swap');
         
         @keyframes slideIn {
           from { opacity: 0; transform: translateY(20px); }
@@ -28,8 +28,8 @@ const AdminTrainersPage = () => {
         }
 
         .trainer-card:hover {
-          transform: translateY(-12px);
-          box-shadow: 0 24px 48px rgba(255, 107, 53, 0.2);
+          border-left: 4px solid #f36100;
+          background: #252525 !important;
         }
 
         .trainer-card:hover .trainer-image {
@@ -55,14 +55,14 @@ const AdminTrainersPage = () => {
 
         <div style={styles.statsBar}>
           <div style={styles.statCard}>
-            <UserCheck size={24} color="#4ECDC4" />
+            <UserCheck size={24} color="#f36100" />
             <div>
               <div style={styles.statNumber}>{trainers.filter(t => t.status === 'active').length}</div>
               <div style={styles.statLabel}>Active</div>
             </div>
           </div>
           <div style={styles.statCard}>
-            <UserX size={24} color="#FF6B6B" />
+            <UserX size={24} color="#a9a9a9" />
             <div>
               <div style={styles.statNumber}>{trainers.filter(t => t.status === 'inactive').length}</div>
               <div style={styles.statLabel}>Inactive</div>
@@ -106,7 +106,7 @@ const AdminTrainersPage = () => {
 
               <div style={styles.trainerMeta}>
                 <div style={styles.metaItem}>
-                  <Award size={16} color="#4ECDC4" />
+                  <Award size={16} color="#f36100" />
                   <span>{trainer.experience}</span>
                 </div>
               </div>
@@ -151,7 +151,7 @@ const AdminTrainersPage = () => {
               <div style={styles.detailSection}>
                 <h3 style={styles.detailSectionTitle}>Experience</h3>
                 <div style={styles.detailCard}>
-                  <Award size={24} color="#FF6B35" />
+                  <Award size={24} color="#f36100" />
                   <div>
                     <div style={styles.detailLabel}>Years in Industry</div>
                     <div style={styles.detailValue}>{selectedTrainer.experience}</div>
@@ -164,7 +164,7 @@ const AdminTrainersPage = () => {
 
                 <div style={styles.contactList}>
                   <div style={styles.contactItem}>
-                    <Mail size={20} color="#4ECDC4" />
+                    <Mail size={20} color="#f36100" />
                     <div>
                       <div style={styles.contactLabel}>Email</div>
                       <div style={styles.contactValue}>{selectedTrainer.email}</div>
@@ -172,7 +172,7 @@ const AdminTrainersPage = () => {
                   </div>
 
                   <div style={styles.contactItem}>
-                    <Phone size={20} color="#4ECDC4" />
+                    <Phone size={20} color="#f36100" />
                     <div>
                       <div style={styles.contactLabel}>Phone</div>
                       <div style={styles.contactValue}>{selectedTrainer.phone}</div>
@@ -223,7 +223,7 @@ const AdminTrainersPage = () => {
 const styles = {
   container: {
     padding: '40px',
-    fontFamily: "'Work Sans', sans-serif",
+    fontFamily: "'Muli', sans-serif",
   },
   header: {
     display: 'flex',
@@ -232,15 +232,15 @@ const styles = {
     marginBottom: '48px',
   },
   title: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '56px',
     color: '#fff',
     margin: '0',
     letterSpacing: '4px',
-    textShadow: '2px 2px 20px rgba(255, 107, 53, 0.3)',
+    textTransform: 'uppercase',
   },
   subtitle: {
-    color: '#8892b0',
+    color: '#a9a9a9',
     fontSize: '18px',
     marginTop: '8px',
   },
@@ -252,10 +252,10 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: '16px',
-    background: 'rgba(255, 255, 255, 0.05)',
+    background: '#252525',
     padding: '20px 32px',
-    borderRadius: '12px',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
+    borderRadius: '0',
+    border: '1px solid #464646',
   },
   statNumber: {
     fontSize: '32px',
@@ -264,7 +264,7 @@ const styles = {
   },
   statLabel: {
     fontSize: '14px',
-    color: '#8892b0',
+    color: '#a9a9a9',
     textTransform: 'uppercase',
     letterSpacing: '1px',
   },
@@ -274,9 +274,9 @@ const styles = {
     gap: '32px',
   },
   trainerCard: {
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
     overflow: 'hidden',
     cursor: 'pointer',
   },
@@ -296,7 +296,7 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    background: 'linear-gradient(to bottom, transparent 50%, rgba(10, 14, 39, 0.9) 100%)',
+    background: 'linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.9) 100%)',
     display: 'flex',
     alignItems: 'flex-start',
     justifyContent: 'flex-end',
@@ -304,46 +304,48 @@ const styles = {
   },
   statusBadge: {
     padding: '8px 16px',
-    borderRadius: '8px',
+    borderRadius: '0',
     fontSize: '12px',
     fontWeight: '700',
     letterSpacing: '1px',
   },
   activeBadge: {
-    background: 'rgba(78, 205, 196, 0.2)',
-    color: '#4ECDC4',
-    border: '1px solid #4ECDC4',
+    background: 'rgba(243, 97, 0, 0.2)',
+    color: '#f36100',
+    border: '1px solid #f36100',
   },
   inactiveBadge: {
-    background: 'rgba(255, 107, 107, 0.2)',
-    color: '#FF6B6B',
-    border: '1px solid #FF6B6B',
+    background: 'rgba(169, 169, 169, 0.2)',
+    color: '#a9a9a9',
+    border: '1px solid #a9a9a9',
   },
   trainerContent: {
     padding: '24px',
   },
   trainerId: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '20px',
-    color: '#FF6B35',
+    color: '#f36100',
     marginBottom: '8px',
   },
   trainerName: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '28px',
     color: '#fff',
     margin: '0 0 12px 0',
     letterSpacing: '1px',
+    textTransform: 'uppercase',
   },
   specialtyBadge: {
     display: 'inline-block',
     padding: '6px 12px',
-    background: 'rgba(78, 205, 196, 0.2)',
-    color: '#4ECDC4',
-    borderRadius: '6px',
+    background: '#252525',
+    color: '#f36100',
+    borderRadius: '0',
     fontSize: '13px',
     fontWeight: '600',
     marginBottom: '16px',
+    border: '1px solid #464646',
   },
   trainerMeta: {
     display: 'flex',
@@ -355,19 +357,20 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
-    color: '#8892b0',
+    color: '#a9a9a9',
     fontSize: '14px',
   },
   viewButton: {
     width: '100%',
     padding: '14px',
-    background: 'rgba(255, 107, 53, 0.1)',
-    border: '1px solid rgba(255, 107, 53, 0.3)',
-    borderRadius: '8px',
-    color: '#FF6B35',
+    background: 'transparent',
+    border: '1px solid #f36100',
+    borderRadius: '0',
+    color: '#f36100',
     fontSize: '14px',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
+    textTransform: 'uppercase',
   },
   modalOverlay: {
     position: 'fixed',
@@ -375,17 +378,16 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    background: 'rgba(0, 0, 0, 0.8)',
-    backdropFilter: 'blur(8px)',
+    background: 'rgba(0, 0, 0, 0.85)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
     zIndex: 1000,
   },
   modalContent: {
-    background: '#1a1f3a',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderLeft: '4px solid #FF6B35',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderLeft: '4px solid #f36100',
     width: '90%',
     maxWidth: '600px',
     height: '100vh',
@@ -396,12 +398,12 @@ const styles = {
     position: 'absolute',
     top: '32px',
     right: '32px',
-    background: 'rgba(255, 255, 255, 0.05)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    color: '#8892b0',
+    background: 'transparent',
+    border: '1px solid #464646',
+    color: '#a9a9a9',
     width: '48px',
     height: '48px',
-    borderRadius: '12px',
+    borderRadius: '0',
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
@@ -412,33 +414,34 @@ const styles = {
     display: 'flex',
     gap: '24px',
     padding: '40px',
-    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+    borderBottom: '1px solid #464646',
   },
   modalImage: {
     width: '140px',
     height: '140px',
-    borderRadius: '16px',
+    borderRadius: '0',
     objectFit: 'cover',
-    border: '2px solid rgba(255, 107, 53, 0.3)',
+    border: '2px solid #f36100',
   },
   modalHeaderInfo: {
     flex: 1,
   },
   modalId: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '20px',
-    color: '#FF6B35',
+    color: '#f36100',
     marginBottom: '8px',
   },
   modalName: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '36px',
     color: '#fff',
     margin: '0 0 12px 0',
     letterSpacing: '2px',
+    textTransform: 'uppercase',
   },
   modalSpecialty: {
-    color: '#4ECDC4',
+    color: '#f36100',
     fontSize: '16px',
     fontWeight: '600',
     marginBottom: '16px',
@@ -446,7 +449,7 @@ const styles = {
   modalStatus: {
     display: 'inline-block',
     padding: '8px 16px',
-    borderRadius: '8px',
+    borderRadius: '0',
     fontSize: '12px',
     fontWeight: '700',
     letterSpacing: '1px',
@@ -458,24 +461,25 @@ const styles = {
     marginBottom: '40px',
   },
   detailSectionTitle: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '24px',
     color: '#fff',
     letterSpacing: '2px',
     marginBottom: '20px',
+    textTransform: 'uppercase',
   },
   detailCard: {
     display: 'flex',
     gap: '16px',
     padding: '24px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '12px',
+    background: '#252525',
+    border: '1px solid #464646',
+    borderRadius: '0',
     alignItems: 'center',
   },
   detailLabel: {
     fontSize: '12px',
-    color: '#8892b0',
+    color: '#a9a9a9',
     textTransform: 'uppercase',
     letterSpacing: '1px',
     marginBottom: '4px',
@@ -494,14 +498,14 @@ const styles = {
     display: 'flex',
     gap: '16px',
     padding: '20px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '12px',
+    background: '#252525',
+    border: '1px solid #464646',
+    borderRadius: '0',
     alignItems: 'center',
   },
   contactLabel: {
     fontSize: '12px',
-    color: '#8892b0',
+    color: '#a9a9a9',
     textTransform: 'uppercase',
     letterSpacing: '1px',
     marginBottom: '4px',
@@ -522,15 +526,15 @@ const styles = {
     alignItems: 'center',
     gap: '12px',
     padding: '24px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '12px',
+    background: '#252525',
+    border: '1px solid #464646',
+    borderRadius: '0',
     textDecoration: 'none',
     textAlign: 'center',
   },
   socialLabel: {
     fontSize: '12px',
-    color: '#8892b0',
+    color: '#a9a9a9',
     textTransform: 'uppercase',
     letterSpacing: '1px',
     marginBottom: '4px',

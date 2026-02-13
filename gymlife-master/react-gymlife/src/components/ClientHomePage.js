@@ -62,7 +62,7 @@ const ClientHomePage = () => {
   return (
     <div style={styles.container}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Muli:wght@300;400;600;700&display=swap');
         
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(20px); }
@@ -95,7 +95,7 @@ const ClientHomePage = () => {
 
         <div style={styles.heroStats}>
           <div style={styles.heroStatItem}>
-            <Calendar size={24} color="#4ECDC4" />
+            <Calendar size={24} color="#f36100" />
             <div>
               <div style={styles.heroStatLabel}>Member Since</div>
               <div style={styles.heroStatValue}>{userData.registeredDate}</div>
@@ -107,7 +107,7 @@ const ClientHomePage = () => {
       <div style={styles.statsGrid}>
         <div className="stat-card" style={{ ...styles.statCard, animationDelay: '0.1s' }}>
           <div style={styles.statIcon}>
-            <Activity size={32} color="#FF6B35" />
+            <Activity size={32} color="#f36100" />
           </div>
           <div style={styles.statContent}>
             <div style={styles.statLabel}>Current Weight</div>
@@ -118,7 +118,7 @@ const ClientHomePage = () => {
 
         <div className="stat-card" style={{ ...styles.statCard, animationDelay: '0.2s' }}>
           <div style={styles.statIcon}>
-            <TrendingUp size={32} color="#4ECDC4" />
+            <TrendingUp size={32} color="#f36100" />
           </div>
           <div style={styles.statContent}>
             <div style={styles.statLabel}>Height</div>
@@ -129,7 +129,7 @@ const ClientHomePage = () => {
 
         <div className="stat-card" style={{ ...styles.statCard, animationDelay: '0.3s' }}>
           <div style={styles.statIcon}>
-            <Award size={32} color="#F7931E" />
+            <Award size={32} color="#f36100" />
           </div>
           <div style={styles.statContent}>
             <div style={styles.statLabel}>Chest Size</div>
@@ -218,27 +218,27 @@ const ClientHomePage = () => {
             <LineChart data={weightData}>
               <defs>
                 <linearGradient id="weightGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#FF6B35" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#FF6B35" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#f36100" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#f36100" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-              <XAxis dataKey="month" stroke="#8892b0" />
-              <YAxis stroke="#8892b0" />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+              <XAxis dataKey="month" stroke="#a9a9a9" />
+              <YAxis stroke="#a9a9a9" />
               <Tooltip
                 contentStyle={{
-                  background: '#1a1f3a',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  borderRadius: '8px'
+                  background: '#0a0a0a',
+                  border: '1px solid #363636',
+                  borderRadius: '0'
                 }}
                 labelStyle={{ color: '#fff' }}
               />
               <Line
                 type="monotone"
                 dataKey="weight"
-                stroke="#FF6B35"
+                stroke="#f36100"
                 strokeWidth={3}
-                dot={{ fill: '#FF6B35', r: 6 }}
+                dot={{ fill: '#f36100', r: 6 }}
                 fill="url(#weightGradient)"
               />
             </LineChart>
@@ -254,27 +254,27 @@ const ClientHomePage = () => {
             <LineChart data={chestData}>
               <defs>
                 <linearGradient id="chestGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#4ECDC4" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#4ECDC4" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#f36100" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#f36100" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-              <XAxis dataKey="month" stroke="#8892b0" />
-              <YAxis stroke="#8892b0" />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+              <XAxis dataKey="month" stroke="#a9a9a9" />
+              <YAxis stroke="#a9a9a9" />
               <Tooltip
                 contentStyle={{
-                  background: '#1a1f3a',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  borderRadius: '8px'
+                  background: '#0a0a0a',
+                  border: '1px solid #363636',
+                  borderRadius: '0'
                 }}
                 labelStyle={{ color: '#fff' }}
               />
               <Line
                 type="monotone"
                 dataKey="chest"
-                stroke="#4ECDC4"
+                stroke="#f36100"
                 strokeWidth={3}
-                dot={{ fill: '#4ECDC4', r: 6 }}
+                dot={{ fill: '#f36100', r: 6 }}
                 fill="url(#chestGradient)"
               />
             </LineChart>
@@ -288,7 +288,7 @@ const ClientHomePage = () => {
 const styles = {
   container: {
     padding: '40px',
-    fontFamily: "'Work Sans', sans-serif",
+    fontFamily: "'Muli', sans-serif",
   },
   hero: {
     display: 'flex',
@@ -296,45 +296,46 @@ const styles = {
     alignItems: 'center',
     marginBottom: '48px',
     padding: '40px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
     animation: 'fadeIn 0.6s ease-out',
   },
   heroContent: { flex: 1 },
-  welcomeText: { fontSize: '18px', color: '#8892b0', marginBottom: '8px' },
+  welcomeText: { fontSize: '18px', color: '#a9a9a9', marginBottom: '8px' },
   userName: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '56px',
     color: '#fff',
     margin: '0 0 16px 0',
     letterSpacing: '4px',
-    textShadow: '2px 2px 20px rgba(255, 107, 53, 0.3)',
+    textTransform: 'uppercase',
   },
   userMeta: { display: 'flex', alignItems: 'center', gap: '16px', fontSize: '16px' },
-  userId: { color: '#FF6B35', fontWeight: '600' },
-  divider: { color: '#8892b0' },
+  userId: { color: '#f36100', fontWeight: '600' },
+  divider: { color: '#a9a9a9' },
   planBadge: {
     padding: '6px 16px',
-    background: 'rgba(78, 205, 196, 0.2)',
-    color: '#4ECDC4',
-    borderRadius: '6px',
+    background: '#252525',
+    color: '#f36100',
+    borderRadius: '0',
     fontSize: '14px',
     fontWeight: '600',
+    border: '1px solid #464646',
   },
   heroStats: { display: 'flex', gap: '24px' },
   heroStatItem: {
     display: 'flex',
     gap: '16px',
     padding: '24px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    borderRadius: '12px',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
+    background: '#252525',
+    borderRadius: '0',
+    border: '1px solid #464646',
     alignItems: 'center',
   },
   heroStatLabel: {
     fontSize: '12px',
-    color: '#8892b0',
+    color: '#a9a9a9',
     textTransform: 'uppercase',
     letterSpacing: '1px',
     marginBottom: '4px',
@@ -350,9 +351,9 @@ const styles = {
     display: 'flex',
     gap: '20px',
     padding: '32px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#252525',
+    border: '1px solid #464646',
+    borderRadius: '0',
   },
   statIcon: {
     width: '64px',
@@ -360,26 +361,26 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: '12px',
+    background: '#0a0a0a',
+    borderRadius: '0',
     flexShrink: 0,
   },
   statContent: { flex: 1 },
   statLabel: {
     fontSize: '14px',
-    color: '#8892b0',
+    color: '#a9a9a9',
     textTransform: 'uppercase',
     letterSpacing: '1px',
     marginBottom: '8px',
   },
   statValue: { fontSize: '36px', fontWeight: '700', color: '#fff', marginBottom: '4px' },
-  statChange: { fontSize: '13px', color: '#4ECDC4', fontWeight: '600' },
+  statChange: { fontSize: '13px', color: '#f36100', fontWeight: '600' },
   updateSection: {
     marginBottom: '48px',
     padding: '32px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
   },
   updateHeader: {
     display: 'flex',
@@ -388,39 +389,42 @@ const styles = {
     marginBottom: '32px',
   },
   sectionTitle: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '32px',
     color: '#fff',
     margin: 0,
     letterSpacing: '2px',
+    textTransform: 'uppercase',
   },
   editButton: {
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
-    background: 'rgba(78, 205, 196, 0.1)',
-    border: '1px solid rgba(78, 205, 196, 0.3)',
-    color: '#4ECDC4',
+    background: 'transparent',
+    border: '1px solid #f36100',
+    color: '#f36100',
     padding: '12px 24px',
-    borderRadius: '8px',
+    borderRadius: '0',
     fontSize: '14px',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
+    textTransform: 'uppercase',
   },
   saveButton: {
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
-    background: 'linear-gradient(135deg, #FF6B35, #F7931E)',
+    background: '#f36100',
     border: 'none',
     color: '#fff',
     padding: '12px 24px',
-    borderRadius: '8px',
+    borderRadius: '0',
     fontSize: '14px',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
+    textTransform: 'uppercase',
   },
   measurementGrid: {
     display: 'grid',
@@ -430,24 +434,24 @@ const styles = {
   measurementCard: { display: 'flex', flexDirection: 'column' },
   measurementLabel: {
     fontSize: '12px',
-    color: '#8892b0',
+    color: '#a9a9a9',
     textTransform: 'uppercase',
     letterSpacing: '1px',
     marginBottom: '12px',
   },
   measurementInput: {
     padding: '16px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '8px',
+    background: '#252525',
+    border: '1px solid #464646',
+    borderRadius: '0',
     color: '#fff',
     fontSize: '24px',
     fontWeight: '700',
     outline: 'none',
   },
   measurementInputActive: {
-    background: 'rgba(255, 107, 53, 0.1)',
-    border: '1px solid rgba(255, 107, 53, 0.3)',
+    background: 'transparent',
+    border: '1px solid #f36100',
   },
   chartsSection: {
     display: 'grid',
@@ -456,19 +460,20 @@ const styles = {
   },
   chartCard: {
     padding: '32px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
   },
   chartHeader: { marginBottom: '24px' },
   chartTitle: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '24px',
     color: '#fff',
     letterSpacing: '2px',
     marginBottom: '8px',
+    textTransform: 'uppercase',
   },
-  chartSubtitle: { fontSize: '14px', color: '#8892b0' },
+  chartSubtitle: { fontSize: '14px', color: '#a9a9a9' },
 };
 
 export default ClientHomePage;

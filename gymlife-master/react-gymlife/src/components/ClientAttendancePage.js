@@ -43,7 +43,7 @@ const ClientAttendancePage = () => {
   return (
     <div style={styles.container}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Muli:wght@300;400;600;700&display=swap');
 
         @keyframes slideIn {
           from { opacity: 0; transform: translateY(20px); }
@@ -56,7 +56,8 @@ const ClientAttendancePage = () => {
         }
 
         .stat-card:hover {
-          transform: translateY(-4px);
+          border-left: 4px solid #f36100;
+          background: #252525 !important;
         }
 
         .month-card {
@@ -65,7 +66,8 @@ const ClientAttendancePage = () => {
         }
 
         .month-card:hover {
-          transform: translateX(8px);
+          border-left: 4px solid #f36100;
+          background: #252525 !important;
         }
       `}</style>
 
@@ -77,24 +79,24 @@ const ClientAttendancePage = () => {
       {/* Stats Overview */}
       <div style={styles.statsGrid}>
         <div className="stat-card" style={{ ...styles.statCard, animationDelay: '0s' }}>
-          <Calendar size={28} color="#FF6B35" />
+          <Calendar size={28} color="#f36100" />
           <div style={styles.statLabel}>Total Days</div>
-          <div style={{ ...styles.statValue, color: '#FF6B35' }}>{attendanceData.totalDays}</div>
+          <div style={{ ...styles.statValue, color: '#f36100' }}>{attendanceData.totalDays}</div>
         </div>
         <div className="stat-card" style={{ ...styles.statCard, animationDelay: '0.1s' }}>
-          <CheckCircle size={28} color="#4ECDC4" />
+          <CheckCircle size={28} color="#f36100" />
           <div style={styles.statLabel}>Days Present</div>
-          <div style={{ ...styles.statValue, color: '#4ECDC4' }}>{attendanceData.presentDays}</div>
+          <div style={{ ...styles.statValue, color: '#f36100' }}>{attendanceData.presentDays}</div>
         </div>
         <div className="stat-card" style={{ ...styles.statCard, animationDelay: '0.2s' }}>
-          <TrendingUp size={28} color="#F7931E" />
+          <TrendingUp size={28} color="#f36100" />
           <div style={styles.statLabel}>Overall Rate</div>
-          <div style={{ ...styles.statValue, color: '#F7931E' }}>{overallPercentage}%</div>
+          <div style={{ ...styles.statValue, color: '#f36100' }}>{overallPercentage}%</div>
         </div>
         <div className="stat-card" style={{ ...styles.statCard, animationDelay: '0.3s' }}>
           <span style={{ fontSize: '28px' }}>🔥</span>
           <div style={styles.statLabel}>Current Streak</div>
-          <div style={{ ...styles.statValue, color: '#FF6B6B' }}>{attendanceData.streak} days</div>
+          <div style={{ ...styles.statValue, color: '#f36100' }}>{attendanceData.streak} days</div>
         </div>
       </div>
 
@@ -108,7 +110,7 @@ const ClientAttendancePage = () => {
           <div style={{ ...styles.overallFill, width: `${overallPercentage}%` }} />
         </div>
         <div style={styles.overallFooter}>
-          <span>Best streak: <strong style={{ color: '#FF6B35' }}>{attendanceData.bestStreak} days</strong></span>
+          <span>Best streak: <strong style={{ color: '#f36100' }}>{attendanceData.bestStreak} days</strong></span>
           <span>{attendanceData.presentDays} / {attendanceData.totalDays} days</span>
         </div>
       </div>
@@ -140,10 +142,10 @@ const ClientAttendancePage = () => {
                     ...styles.monthFill,
                     width: `${percent}%`,
                     background: percent >= 90
-                      ? '#4ECDC4'
+                      ? '#f36100'
                       : percent >= 75
-                        ? '#F7931E'
-                        : '#FF6B6B',
+                        ? '#f36100'
+                        : '#a9a9a9',
                   }}
                 />
               </div>
@@ -156,21 +158,21 @@ const ClientAttendancePage = () => {
                     style={{
                       ...styles.dayCell,
                       background: day.present
-                        ? 'rgba(78, 205, 196, 0.3)'
+                        ? 'rgba(243, 97, 0, 0.3)'
                         : day.scheduled
-                          ? 'rgba(255, 107, 107, 0.2)'
-                          : 'rgba(255, 255, 255, 0.03)',
+                          ? 'rgba(169, 169, 169, 0.2)'
+                          : '#151515',
                       border: day.present
-                        ? '1px solid rgba(78, 205, 196, 0.5)'
+                        ? '1px solid #f36100'
                         : day.scheduled
-                          ? '1px solid rgba(255, 107, 107, 0.3)'
-                          : '1px solid rgba(255, 255, 255, 0.08)',
+                          ? '1px solid #464646'
+                          : '1px solid #252525',
                     }}
                     title={`Day ${day.day}: ${day.present ? 'Present' : day.scheduled ? 'Absent' : 'No Session'}`}
                   >
                     <span style={styles.dayNumber}>{day.day}</span>
-                    {day.present && <CheckCircle size={10} color="#4ECDC4" />}
-                    {!day.present && day.scheduled && <XCircle size={10} color="#FF6B6B" />}
+                    {day.present && <CheckCircle size={10} color="#f36100" />}
+                    {!day.present && day.scheduled && <XCircle size={10} color="#a9a9a9" />}
                   </div>
                 ))}
               </div>
@@ -182,15 +184,15 @@ const ClientAttendancePage = () => {
       {/* Legend */}
       <div style={styles.legend}>
         <div style={styles.legendItem}>
-          <div style={{ ...styles.legendDot, background: '#4ECDC4' }} />
+          <div style={{ ...styles.legendDot, background: '#f36100' }} />
           <span>Present</span>
         </div>
         <div style={styles.legendItem}>
-          <div style={{ ...styles.legendDot, background: '#FF6B6B' }} />
+          <div style={{ ...styles.legendDot, background: '#a9a9a9' }} />
           <span>Absent</span>
         </div>
         <div style={styles.legendItem}>
-          <div style={{ ...styles.legendDot, background: 'rgba(255, 255, 255, 0.1)' }} />
+          <div style={{ ...styles.legendDot, background: '#252525' }} />
           <span>No Session</span>
         </div>
       </div>
@@ -236,18 +238,18 @@ function generateDays(year, month, presentCount, totalScheduled) {
 const styles = {
   container: {
     padding: '40px',
-    fontFamily: "'Work Sans', sans-serif",
+    fontFamily: "'Muli', sans-serif",
   },
   header: { marginBottom: '48px' },
   title: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '56px',
     color: '#fff',
     margin: '0',
     letterSpacing: '4px',
-    textShadow: '2px 2px 20px rgba(255, 107, 53, 0.3)',
+    textTransform: 'uppercase',
   },
-  subtitle: { color: '#8892b0', fontSize: '18px', marginTop: '8px' },
+  subtitle: { color: '#a9a9a9', fontSize: '18px', marginTop: '8px' },
   statsGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
@@ -256,9 +258,9 @@ const styles = {
   },
   statCard: {
     padding: '28px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
     textAlign: 'center',
     display: 'flex',
     flexDirection: 'column',
@@ -266,17 +268,18 @@ const styles = {
     gap: '12px',
   },
   statLabel: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '16px',
-    color: '#8892b0',
+    color: '#a9a9a9',
     letterSpacing: '2px',
+    textTransform: 'uppercase',
   },
   statValue: { fontSize: '36px', fontWeight: '700' },
   overallCard: {
     padding: '32px',
-    background: 'linear-gradient(135deg, rgba(255, 107, 53, 0.08), rgba(78, 205, 196, 0.08))',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
     marginBottom: '48px',
   },
   overallHeader: {
@@ -286,38 +289,40 @@ const styles = {
     marginBottom: '16px',
   },
   overallTitle: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '24px',
     color: '#fff',
     letterSpacing: '3px',
+    textTransform: 'uppercase',
   },
-  overallPercent: { fontSize: '42px', fontWeight: '700', color: '#4ECDC4' },
+  overallPercent: { fontSize: '42px', fontWeight: '700', color: '#f36100' },
   overallBar: {
     width: '100%',
     height: '16px',
-    background: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: '8px',
+    background: '#252525',
+    borderRadius: '0',
     overflow: 'hidden',
     marginBottom: '16px',
   },
   overallFill: {
     height: '100%',
-    background: 'linear-gradient(90deg, #FF6B35, #4ECDC4)',
-    borderRadius: '8px',
+    background: '#f36100',
+    borderRadius: '0',
     transition: 'width 0.5s ease',
   },
   overallFooter: {
     display: 'flex',
     justifyContent: 'space-between',
-    color: '#8892b0',
+    color: '#a9a9a9',
     fontSize: '14px',
   },
   sectionTitle: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '32px',
     color: '#fff',
     letterSpacing: '3px',
     marginBottom: '24px',
+    textTransform: 'uppercase',
   },
   monthlyList: {
     display: 'flex',
@@ -327,9 +332,9 @@ const styles = {
   },
   monthCard: {
     padding: '28px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
   },
   monthHeader: {
     display: 'flex',
@@ -338,24 +343,25 @@ const styles = {
     marginBottom: '16px',
   },
   monthName: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '24px',
     color: '#fff',
     letterSpacing: '2px',
+    textTransform: 'uppercase',
   },
-  monthSub: { color: '#8892b0', fontSize: '14px', marginTop: '4px' },
-  monthPercent: { fontSize: '32px', fontWeight: '700', color: '#4ECDC4' },
+  monthSub: { color: '#a9a9a9', fontSize: '14px', marginTop: '4px' },
+  monthPercent: { fontSize: '32px', fontWeight: '700', color: '#f36100' },
   monthBar: {
     width: '100%',
     height: '10px',
-    background: 'rgba(255, 255, 255, 0.08)',
-    borderRadius: '5px',
+    background: '#252525',
+    borderRadius: '0',
     overflow: 'hidden',
     marginBottom: '20px',
   },
   monthFill: {
     height: '100%',
-    borderRadius: '5px',
+    borderRadius: '0',
     transition: 'width 0.5s ease',
   },
   dayGrid: {
@@ -369,30 +375,30 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     padding: '6px 4px',
-    borderRadius: '6px',
+    borderRadius: '0',
     gap: '2px',
   },
-  dayNumber: { fontSize: '11px', color: '#8892b0' },
+  dayNumber: { fontSize: '11px', color: '#a9a9a9' },
   legend: {
     display: 'flex',
     gap: '32px',
     justifyContent: 'center',
     padding: '24px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
   },
   legendItem: {
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
-    color: '#8892b0',
+    color: '#a9a9a9',
     fontSize: '14px',
   },
   legendDot: {
     width: '12px',
     height: '12px',
-    borderRadius: '3px',
+    borderRadius: '0',
   },
 };
 

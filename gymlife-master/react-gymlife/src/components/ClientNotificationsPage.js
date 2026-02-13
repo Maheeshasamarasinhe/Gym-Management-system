@@ -18,10 +18,10 @@ const ClientNotificationsPage = () => {
   const [filter, setFilter] = useState('all');
 
   const typeConfig = {
-    schedule: { icon: <Calendar size={20} />, color: '#4ECDC4', label: 'Schedule' },
-    nutrition: { icon: <Utensils size={20} />, color: '#FF6B35', label: 'Nutrition' },
-    payment: { icon: <CreditCard size={20} />, color: '#F7931E', label: 'Payment' },
-    profile: { icon: <User size={20} />, color: '#64B5F6', label: 'Profile' },
+    schedule: { icon: <Calendar size={20} />, color: '#f36100', label: 'Schedule' },
+    nutrition: { icon: <Utensils size={20} />, color: '#f36100', label: 'Nutrition' },
+    payment: { icon: <CreditCard size={20} />, color: '#f36100', label: 'Payment' },
+    profile: { icon: <User size={20} />, color: '#f36100', label: 'Profile' },
   };
 
   const filters = [
@@ -53,7 +53,7 @@ const ClientNotificationsPage = () => {
   return (
     <div style={styles.container}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Muli:wght@300;400;600;700&display=swap');
 
         @keyframes slideIn {
           from { opacity: 0; transform: translateY(20px); }
@@ -66,7 +66,8 @@ const ClientNotificationsPage = () => {
         }
 
         .notification-card:hover {
-          transform: translateX(4px);
+          border-left: 4px solid #f36100;
+          background: #252525 !important;
         }
 
         .filter-btn {
@@ -74,7 +75,8 @@ const ClientNotificationsPage = () => {
         }
 
         .filter-btn:hover {
-          background: rgba(255, 107, 53, 0.1) !important;
+          background: #252525 !important;
+          border-color: #f36100 !important;
         }
 
         .action-btn {
@@ -128,7 +130,7 @@ const ClientNotificationsPage = () => {
       <div style={styles.notificationsList}>
         {filteredNotifications.length === 0 ? (
           <div style={styles.emptyState}>
-            <Bell size={48} color="#8892b0" />
+            <Bell size={48} color="#a9a9a9" />
             <div style={styles.emptyText}>No notifications</div>
           </div>
         ) : (
@@ -192,7 +194,7 @@ const ClientNotificationsPage = () => {
 const styles = {
   container: {
     padding: '40px',
-    fontFamily: "'Work Sans', sans-serif",
+    fontFamily: "'Muli', sans-serif",
   },
   header: {
     display: 'flex',
@@ -201,27 +203,28 @@ const styles = {
     marginBottom: '40px',
   },
   title: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '56px',
     color: '#fff',
     margin: '0',
     letterSpacing: '4px',
-    textShadow: '2px 2px 20px rgba(255, 107, 53, 0.3)',
+    textTransform: 'uppercase',
   },
-  subtitle: { color: '#8892b0', fontSize: '18px', marginTop: '8px' },
+  subtitle: { color: '#a9a9a9', fontSize: '18px', marginTop: '8px' },
   markAllBtn: {
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
     padding: '12px 24px',
-    background: 'rgba(78, 205, 196, 0.1)',
-    border: '1px solid rgba(78, 205, 196, 0.3)',
-    borderRadius: '8px',
-    color: '#4ECDC4',
+    background: 'transparent',
+    border: '1px solid #f36100',
+    borderRadius: '0',
+    color: '#f36100',
     fontSize: '14px',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
     marginTop: '16px',
+    textTransform: 'uppercase',
   },
   filterBar: {
     display: 'flex',
@@ -234,24 +237,24 @@ const styles = {
     alignItems: 'center',
     gap: '8px',
     padding: '10px 20px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '8px',
-    color: '#8892b0',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
+    color: '#a9a9a9',
     fontSize: '14px',
     fontWeight: '500',
     cursor: 'pointer',
   },
   filterBtnActive: {
-    background: 'rgba(255, 107, 53, 0.15)',
-    border: '1px solid rgba(255, 107, 53, 0.3)',
-    color: '#FF6B35',
+    background: '#252525',
+    border: '1px solid #f36100',
+    color: '#f36100',
   },
   badgeCount: {
-    background: '#FF6B35',
+    background: '#f36100',
     color: '#fff',
     padding: '2px 8px',
-    borderRadius: '10px',
+    borderRadius: '0',
     fontSize: '12px',
     fontWeight: '700',
   },
@@ -269,29 +272,30 @@ const styles = {
     gap: '16px',
   },
   emptyText: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '24px',
-    color: '#8892b0',
+    color: '#a9a9a9',
     letterSpacing: '2px',
+    textTransform: 'uppercase',
   },
   notificationCard: {
     display: 'flex',
     gap: '20px',
     padding: '24px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.08)',
-    borderRadius: '16px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
     alignItems: 'flex-start',
   },
   notificationUnread: {
-    background: 'rgba(255, 107, 53, 0.05)',
-    border: '1px solid rgba(255, 107, 53, 0.15)',
-    borderLeft: '3px solid #FF6B35',
+    background: '#151515',
+    border: '1px solid #464646',
+    borderLeft: '3px solid #f36100',
   },
   iconWrapper: {
     width: '44px',
     height: '44px',
-    borderRadius: '12px',
+    borderRadius: '0',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -314,10 +318,10 @@ const styles = {
     alignItems: 'center',
     gap: '6px',
     padding: '3px 10px',
-    background: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: '12px',
+    background: '#252525',
+    borderRadius: '0',
     fontSize: '12px',
-    color: '#8892b0',
+    color: '#a9a9a9',
   },
   typeDot: {
     width: '6px',
@@ -325,12 +329,12 @@ const styles = {
     borderRadius: '50%',
   },
   notificationMessage: {
-    color: '#ccd6f6',
+    color: '#c4c4c4',
     fontSize: '14px',
     lineHeight: '1.6',
     marginBottom: '8px',
   },
-  notificationTime: { color: '#8892b0', fontSize: '13px' },
+  notificationTime: { color: '#a9a9a9', fontSize: '13px' },
   notificationActions: {
     display: 'flex',
     flexDirection: 'column',
@@ -339,22 +343,22 @@ const styles = {
   },
   readBtn: {
     background: 'none',
-    border: '1px solid rgba(78, 205, 196, 0.3)',
-    color: '#4ECDC4',
+    border: '1px solid #f36100',
+    color: '#f36100',
     cursor: 'pointer',
     padding: '8px',
-    borderRadius: '8px',
+    borderRadius: '0',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
   deleteBtn: {
     background: 'none',
-    border: '1px solid rgba(255, 107, 107, 0.3)',
-    color: '#FF6B6B',
+    border: '1px solid #464646',
+    color: '#a9a9a9',
     cursor: 'pointer',
     padding: '8px',
-    borderRadius: '8px',
+    borderRadius: '0',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
