@@ -24,20 +24,20 @@ const AdminLayout = ({ children }) => {
   return (
     <div style={styles.layout}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Muli:wght@300;400;600;700&display=swap');
         
         .admin-nav-item {
           transition: all 0.3s ease;
         }
         .admin-nav-item:hover {
-          background: rgba(255, 107, 53, 0.15) !important;
-          transform: translateX(4px);
+          background: #252525 !important;
+          color: #f36100 !important;
         }
       `}</style>
 
       <nav style={styles.topNav}>
         <div style={styles.navBrand} onClick={() => navigate('/admin/members')}>
-          <LayoutDashboard size={28} color="#FF6B35" />
+          <LayoutDashboard size={28} color="#f36100" />
           <span style={styles.brandText}>GYM ADMIN</span>
         </div>
 
@@ -77,8 +77,8 @@ const AdminLayout = ({ children }) => {
 const styles = {
   layout: {
     minHeight: '100vh',
-    background: 'linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%)',
-    fontFamily: "'Work Sans', sans-serif",
+    background: '#151515',
+    fontFamily: "'Muli', sans-serif",
   },
   topNav: {
     display: 'flex',
@@ -86,12 +86,11 @@ const styles = {
     justifyContent: 'space-between',
     padding: '0 40px',
     height: '70px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+    background: '#0a0a0a',
+    borderBottom: '2px solid #252525',
     position: 'sticky',
     top: 0,
     zIndex: 100,
-    backdropFilter: 'blur(12px)',
   },
   navBrand: {
     display: 'flex',
@@ -100,44 +99,52 @@ const styles = {
     cursor: 'pointer',
   },
   brandText: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '28px',
     color: '#fff',
     letterSpacing: '3px',
+    textTransform: 'uppercase',
+    fontWeight: '500',
   },
   navLinks: {
     display: 'flex',
-    gap: '8px',
+    gap: '4px',
   },
   navItem: {
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
     padding: '10px 20px',
-    borderRadius: '8px',
-    color: '#8892b0',
+    borderRadius: '0',
+    color: '#a9a9a9',
     cursor: 'pointer',
     fontSize: '15px',
     fontWeight: '500',
+    fontFamily: "'Oswald', sans-serif",
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
   },
   navItemActive: {
-    background: 'rgba(255, 107, 53, 0.2)',
-    color: '#FF6B35',
+    background: '#252525',
+    color: '#f36100',
     fontWeight: '600',
+    borderBottom: '2px solid #f36100',
   },
   logoutButton: {
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
     padding: '10px 20px',
-    background: 'rgba(255, 107, 107, 0.1)',
-    border: '1px solid rgba(255, 107, 107, 0.3)',
-    borderRadius: '8px',
-    color: '#FF6B6B',
+    background: 'transparent',
+    border: '1px solid #f36100',
+    borderRadius: '0',
+    color: '#f36100',
     fontSize: '14px',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
   },
   mainContent: {
     minHeight: 'calc(100vh - 70px)',
