@@ -50,6 +50,14 @@ const initialMembers = [
       { id: 2, name: 'Squats', steps: 5, rounds: 4, image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=400', video: 'https://youtube.com/watch?v=squats', category: 'Legs' },
     ],
     nutrition: { protein: 150, carbs: 200, water: 3.5, fiber: 30 },
+    mealPlan: [
+      { id: 1, name: 'Breakfast', time: '7:00 AM', items: ['Oatmeal with berries', 'Scrambled eggs (3)', 'Whole wheat toast', 'Orange juice'], calories: 650 },
+      { id: 2, name: 'Mid-Morning Snack', time: '10:00 AM', items: ['Greek yogurt', 'Mixed nuts (30g)', 'Banana'], calories: 350 },
+      { id: 3, name: 'Lunch', time: '1:00 PM', items: ['Grilled chicken breast', 'Brown rice', 'Steamed broccoli', 'Mixed salad'], calories: 750 },
+      { id: 4, name: 'Pre-Workout Snack', time: '4:00 PM', items: ['Protein shake', 'Rice cakes with peanut butter'], calories: 300 },
+      { id: 5, name: 'Post-Workout', time: '6:30 PM', items: ['Whey protein shake', 'Banana'], calories: 250 },
+      { id: 6, name: 'Dinner', time: '8:00 PM', items: ['Salmon fillet', 'Sweet potato', 'Asparagus', 'Quinoa salad'], calories: 700 },
+    ],
     attendance: [
       { month: 'June', days: 24, total: 30 },
       { month: 'May', days: 28, total: 31 },
@@ -96,6 +104,12 @@ const initialMembers = [
       { id: 2, name: 'Pull-ups', steps: 3, rounds: 5, image: 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=400', video: 'https://youtube.com/watch?v=pullups', category: 'Back' },
     ],
     nutrition: { protein: 110, carbs: 180, water: 2.5, fiber: 25 },
+    mealPlan: [
+      { id: 1, name: 'Breakfast', time: '7:30 AM', items: ['Avocado toast', 'Boiled eggs (2)', 'Green smoothie'], calories: 500 },
+      { id: 2, name: 'Lunch', time: '12:30 PM', items: ['Grilled salmon', 'Quinoa bowl', 'Steamed vegetables'], calories: 650 },
+      { id: 3, name: 'Afternoon Snack', time: '3:30 PM', items: ['Protein bar', 'Apple'], calories: 250 },
+      { id: 4, name: 'Dinner', time: '7:00 PM', items: ['Chicken stir-fry', 'Brown rice', 'Mixed greens'], calories: 600 },
+    ],
     attendance: [
       { month: 'June', days: 20, total: 30 },
       { month: 'May', days: 22, total: 31 },
@@ -138,6 +152,11 @@ const initialMembers = [
       { id: 1, name: 'Shoulder Press', steps: 4, rounds: 3, image: 'https://images.unsplash.com/photo-1532029837206-abbe2b7620e3?w=400', video: 'https://youtube.com/watch?v=shoulder-press', category: 'Shoulders' },
     ],
     nutrition: { protein: 180, carbs: 250, water: 4.0, fiber: 35 },
+    mealPlan: [
+      { id: 1, name: 'Breakfast', time: '6:30 AM', items: ['Protein pancakes', 'Turkey bacon', 'Black coffee'], calories: 700 },
+      { id: 2, name: 'Lunch', time: '12:00 PM', items: ['Steak and rice', 'Grilled vegetables', 'Protein shake'], calories: 900 },
+      { id: 3, name: 'Dinner', time: '7:30 PM', items: ['Grilled chicken thighs', 'Mashed sweet potato', 'Caesar salad'], calories: 750 },
+    ],
     attendance: [
       { month: 'June', days: 10, total: 30 },
       { month: 'May', days: 15, total: 31 },
@@ -175,6 +194,12 @@ const initialMembers = [
       { id: 2, name: 'Bench Press', steps: 4, rounds: 3, image: 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=400', video: 'https://youtube.com/watch?v=bench-press', category: 'Chest' },
     ],
     nutrition: { protein: 100, carbs: 160, water: 2.5, fiber: 22 },
+    mealPlan: [
+      { id: 1, name: 'Breakfast', time: '8:00 AM', items: ['Smoothie bowl', 'Granola', 'Fresh berries'], calories: 450 },
+      { id: 2, name: 'Lunch', time: '1:00 PM', items: ['Turkey wrap', 'Side salad', 'Sparkling water'], calories: 550 },
+      { id: 3, name: 'Snack', time: '4:00 PM', items: ['Trail mix', 'Green tea'], calories: 200 },
+      { id: 4, name: 'Dinner', time: '7:00 PM', items: ['Baked cod', 'Roasted vegetables', 'Wild rice'], calories: 600 },
+    ],
     attendance: [
       { month: 'June', days: 26, total: 30 },
       { month: 'May', days: 27, total: 31 },
@@ -216,6 +241,11 @@ const initialMembers = [
       { id: 1, name: 'Squats', steps: 5, rounds: 4, image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=400', video: 'https://youtube.com/watch?v=squats', category: 'Legs' },
     ],
     nutrition: { protein: 130, carbs: 200, water: 3.0, fiber: 28 },
+    mealPlan: [
+      { id: 1, name: 'Breakfast', time: '7:00 AM', items: ['Egg white omelette', 'Whole grain toast', 'Coffee'], calories: 500 },
+      { id: 2, name: 'Lunch', time: '12:30 PM', items: ['Chicken breast', 'Brown rice', 'Broccoli'], calories: 650 },
+      { id: 3, name: 'Dinner', time: '7:00 PM', items: ['Lean beef stir-fry', 'Noodles', 'Mixed vegetables'], calories: 700 },
+    ],
     attendance: [
       { month: 'June', days: 8, total: 30 },
       { month: 'May', days: 12, total: 31 },
@@ -328,6 +358,43 @@ export const GymDataProvider = ({ children }) => {
       `Admin updated your nutrition plan. Protein: ${nutritionData.protein}g, Carbs: ${nutritionData.carbs}g, Water: ${nutritionData.water}L, Fiber: ${nutritionData.fiber}g`);
   }, [addNotification]);
 
+  // ── Meal Plan CRUD ─────────────────────────────────────────────────────
+  const addMealToMember = useCallback((memberId, meal) => {
+    const newMeal = { ...meal, id: Date.now() };
+    setMembers(prev => prev.map(m =>
+      m.id === memberId
+        ? { ...m, mealPlan: [...(m.mealPlan || []), newMeal] }
+        : m
+    ));
+    addNotification(memberId, 'nutrition', 'Meal Plan Updated',
+      `Admin added "${meal.name}" to your meal plan.`);
+    return newMeal;
+  }, [addNotification]);
+
+  const editMemberMeal = useCallback((memberId, mealId, updates) => {
+    setMembers(prev => prev.map(m =>
+      m.id === memberId
+        ? { ...m, mealPlan: (m.mealPlan || []).map(meal => meal.id === mealId ? { ...meal, ...updates } : meal) }
+        : m
+    ));
+    addNotification(memberId, 'nutrition', 'Meal Updated',
+      `Admin updated "${updates.name || 'a meal'}" in your meal plan.`);
+  }, [addNotification]);
+
+  const deleteMemberMeal = useCallback((memberId, mealId) => {
+    let mealName = '';
+    setMembers(prev => prev.map(m => {
+      if (m.id === memberId) {
+        const meal = (m.mealPlan || []).find(ml => ml.id === mealId);
+        if (meal) mealName = meal.name;
+        return { ...m, mealPlan: (m.mealPlan || []).filter(ml => ml.id !== mealId) };
+      }
+      return m;
+    }));
+    addNotification(memberId, 'nutrition', 'Meal Removed',
+      `Admin removed "${mealName}" from your meal plan.`);
+  }, [addNotification]);
+
   // ── Client self-update (measurements) ──────────────────────────────────
   const updateMemberMeasurements = useCallback((memberId, measurements) => {
     setMembers(prev => prev.map(m => {
@@ -414,6 +481,10 @@ export const GymDataProvider = ({ children }) => {
     deleteMemberExercise,
     // Nutrition ops
     updateMemberNutrition,
+    // Meal plan ops
+    addMealToMember,
+    editMemberMeal,
+    deleteMemberMeal,
     // Exercise library ops
     addExercise,
     editExercise,
