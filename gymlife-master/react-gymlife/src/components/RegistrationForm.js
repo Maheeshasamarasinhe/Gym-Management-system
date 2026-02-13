@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { authAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 const RegistrationForm = () => {
@@ -35,22 +34,13 @@ const RegistrationForm = () => {
     setIsLoading(true);
 
     try {
-      const registerData = {
+      // Simulate registration (in production, use API)
+      const authData = {
+        token: 'demo-token-' + Date.now(),
         email: formData.email,
-        password: formData.password,
         role: formData.role,
+        userId: formData.role === 'ADMIN' ? 'ADMIN' + Date.now() : 'M' + String(Date.now()).slice(-3),
       };
-
-      let response;
-      if (formData.role === 'ADMIN') {
-        response = await authAPI.registerAdmin(registerData);
-      } else if (formData.role === 'TRAINER') {
-        response = await authAPI.registerTrainer(registerData);
-      } else {
-        response = await authAPI.registerClient(registerData);
-      }
-
-      const authData = response.data; // { token, email, role, userId }
 
       setSuccess('Registration successful! Redirecting...');
 
@@ -58,25 +48,14 @@ const RegistrationForm = () => {
       login(authData);
 
       setTimeout(() => {
-        if (authData.role === 'ADMIN' || authData.role === 'TRAINER') {
-          navigate('/admin-dashboard');
+        if (authData.role === 'ADMIN') {
+          navigate('/admin/members');
         } else {
-          navigate('/user-dashboard');
+          navigate('/client/home');
         }
       }, 1500);
     } catch (err) {
-      if (err.response && err.response.data) {
-        const data = err.response.data;
-        // Handle validation errors (field-level)
-        if (data.details) {
-          const messages = Object.values(data.details).join('. ');
-          setError(messages);
-        } else {
-          setError(data.message || data.error || 'Registration failed');
-        }
-      } else {
-        setError('Network error. Please check your connection.');
-      }
+      setError('Registration failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
