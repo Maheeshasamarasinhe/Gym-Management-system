@@ -27,7 +27,7 @@ const AdminLandingPage = () => {
   return (
     <div style={styles.container}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Muli:wght@300;400;600;700&display=swap');
         
         @keyframes slideIn {
           from { opacity: 0; transform: translateY(20px); }
@@ -46,7 +46,8 @@ const AdminLandingPage = () => {
 
         .member-card:hover {
           transform: translateX(8px);
-          box-shadow: -4px 0 0 0 #FF6B35;
+          border-left: 4px solid #f36100 !important;
+          background: #252525 !important;
         }
 
         .delete-btn {
@@ -54,7 +55,10 @@ const AdminLandingPage = () => {
         }
 
         .delete-btn:hover {
-          transform: scale(1.1) rotate(5deg);
+          transform: scale(1.1);
+          background: #f36100 !important;
+          border-color: #f36100 !important;
+          color: #fff !important;
         }
 
         .search-input {
@@ -62,7 +66,7 @@ const AdminLandingPage = () => {
         }
 
         .search-input:focus {
-          transform: scale(1.02);
+          border-color: #f36100 !important;
         }
       `}</style>
 
@@ -87,14 +91,14 @@ const AdminLandingPage = () => {
 
       <div style={styles.statsBar}>
         <div style={styles.statCard}>
-          <UserCheck size={24} color="#4ECDC4" />
+          <UserCheck size={24} color="#f36100" />
           <div>
             <div style={styles.statNumber}>{members.filter(m => m.membership === 'active').length}</div>
             <div style={styles.statLabel}>Active</div>
           </div>
         </div>
         <div style={styles.statCard}>
-          <UserX size={24} color="#FF6B6B" />
+          <UserX size={24} color="#a9a9a9" />
           <div>
             <div style={styles.statNumber}>{members.filter(m => m.membership === 'inactive').length}</div>
             <div style={styles.statLabel}>Inactive</div>
@@ -155,7 +159,7 @@ const AdminLandingPage = () => {
 const styles = {
   container: {
     padding: '40px',
-    fontFamily: "'Work Sans', sans-serif",
+    fontFamily: "'Muli', sans-serif",
   },
   header: {
     display: 'flex',
@@ -165,16 +169,17 @@ const styles = {
     animation: 'fadeIn 0.6s ease-out',
   },
   title: {
-    fontFamily: "'Bebas Neue', sans-serif",
-    fontSize: '56px',
+    fontFamily: "'Oswald', sans-serif",
+    fontSize: '48px',
     color: '#fff',
     margin: '0',
-    letterSpacing: '4px',
-    textShadow: '2px 2px 20px rgba(255, 107, 53, 0.3)',
+    letterSpacing: '2px',
+    textTransform: 'uppercase',
+    fontWeight: '500',
   },
   subtitle: {
-    color: '#8892b0',
-    fontSize: '18px',
+    color: '#a9a9a9',
+    fontSize: '16px',
     marginTop: '8px',
   },
   searchContainer: {
@@ -186,15 +191,15 @@ const styles = {
     left: '20px',
     top: '50%',
     transform: 'translateY(-50%)',
-    color: '#8892b0',
+    color: '#a9a9a9',
   },
   searchInput: {
     width: '100%',
     padding: '16px 20px 16px 56px',
-    background: 'rgba(255, 255, 255, 0.05)',
-    border: '2px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '12px',
-    color: '#fff',
+    background: 'transparent',
+    border: '1px solid #363636',
+    borderRadius: '0',
+    color: '#c4c4c4',
     fontSize: '16px',
     outline: 'none',
     boxSizing: 'border-box',
@@ -208,36 +213,38 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: '16px',
-    background: 'rgba(255, 255, 255, 0.05)',
+    background: '#252525',
     padding: '20px 32px',
-    borderRadius: '12px',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
+    borderRadius: '0',
+    border: '1px solid #464646',
   },
   statNumber: {
     fontSize: '32px',
     fontWeight: '700',
     color: '#fff',
+    fontFamily: "'Oswald', sans-serif",
   },
   statLabel: {
     fontSize: '14px',
-    color: '#8892b0',
+    color: '#a9a9a9',
     textTransform: 'uppercase',
     letterSpacing: '1px',
   },
   membersList: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '16px',
+    gap: '12px',
   },
   memberCard: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '12px',
+    background: '#0a0a0a',
+    border: '1px solid #464646',
+    borderRadius: '0',
     padding: '24px',
     cursor: 'pointer',
+    borderLeft: '4px solid transparent',
   },
   memberInfo: {
     display: 'flex',
@@ -245,9 +252,9 @@ const styles = {
     alignItems: 'center',
   },
   memberId: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: '28px',
-    color: '#FF6B35',
+    color: '#f36100',
     minWidth: '80px',
   },
   memberDetails: {
@@ -266,18 +273,22 @@ const styles = {
   },
   planBadge: {
     padding: '4px 12px',
-    background: 'rgba(78, 205, 196, 0.2)',
-    color: '#4ECDC4',
-    borderRadius: '6px',
+    background: '#252525',
+    color: '#f36100',
+    borderRadius: '0',
     fontSize: '13px',
-    fontWeight: '600',
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+    border: '1px solid #464646',
   },
   dateBadge: {
     padding: '4px 12px',
-    background: 'rgba(255, 255, 255, 0.05)',
-    color: '#8892b0',
-    borderRadius: '6px',
+    background: '#252525',
+    color: '#a9a9a9',
+    borderRadius: '0',
     fontSize: '13px',
+    border: '1px solid #363636',
   },
   memberActions: {
     display: 'flex',
@@ -286,27 +297,27 @@ const styles = {
   },
   statusBadge: {
     padding: '8px 20px',
-    borderRadius: '8px',
+    borderRadius: '0',
     fontSize: '12px',
     fontWeight: '700',
     letterSpacing: '1px',
   },
   activeBadge: {
-    background: 'rgba(78, 205, 196, 0.2)',
-    color: '#4ECDC4',
-    border: '1px solid #4ECDC4',
+    background: '#252525',
+    color: '#f36100',
+    border: '1px solid #f36100',
   },
   inactiveBadge: {
-    background: 'rgba(255, 107, 107, 0.2)',
-    color: '#FF6B6B',
-    border: '1px solid #FF6B6B',
+    background: '#252525',
+    color: '#a9a9a9',
+    border: '1px solid #464646',
   },
   deleteButton: {
-    background: 'rgba(255, 107, 107, 0.1)',
-    border: '1px solid rgba(255, 107, 107, 0.3)',
-    color: '#FF6B6B',
+    background: '#252525',
+    border: '1px solid #464646',
+    color: '#a9a9a9',
     padding: '12px',
-    borderRadius: '8px',
+    borderRadius: '0',
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
@@ -317,7 +328,7 @@ const styles = {
     textAlign: 'center',
   },
   emptyText: {
-    color: '#8892b0',
+    color: '#a9a9a9',
     fontSize: '18px',
   },
 };
